@@ -398,10 +398,15 @@
         }
 
         if (contactForm) {
+            // ——— Google Sheets Web App URL ———
+            // Replace this with your deployed Google Apps Script URL
+            const GOOGLE_SHEET_URL = 'https://script.google.com/macros/s/AKfycbyF4Of20yctGHGQDkI56qM4kxhTkEkpqkqsOpT3ragJpksSTcqBOoqYVVGDt3Rlt9jU/exec';
+
             contactForm.addEventListener('submit', function (e) {
                 e.preventDefault();
                 const name = document.getElementById('contact-name');
                 const email = document.getElementById('contact-email');
+                const subject = document.getElementById('contact-subject');
                 const message = document.getElementById('contact-message');
 
                 if (!name || !name.value.trim()) { showNotification('Please enter your name.'); return; }
@@ -409,18 +414,48 @@
                 if (!message || !message.value.trim()) { showNotification('Please enter your message.'); return; }
 
                 const btn = contactForm.querySelector('button[type="submit"]');
+                const original = btn ? btn.innerHTML : '';
                 if (btn) {
-                    const original = btn.innerHTML;
                     btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
                     btn.disabled = true;
                     btn.style.opacity = '0.7';
-                    setTimeout(function () {
+                }
+
+                // Build form data
+                const formData = new FormData();
+                formData.append('name', name.value.trim());
+                formData.append('email', email.value.trim());
+                formData.append('subject', subject ? subject.value.trim() : '');
+                formData.append('message', message.value.trim());
+                formData.append('timestamp', new Date().toLocaleString());
+
+                fetch(GOOGLE_SHEET_URL, {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(function (res) { return res.json(); })
+                .then(function (data) {
+                    if (btn) {
                         btn.innerHTML = '<i class="fas fa-check"></i> Sent!';
                         btn.style.opacity = '1';
-                        showNotification('Message sent successfully! Dr. Dhir will get back to you soon.');
-                        setTimeout(function () { btn.innerHTML = original; btn.disabled = false; contactForm.reset(); }, 2500);
-                    }, 1500);
-                }
+                    }
+                    showNotification('Message sent successfully! Dr. Dhir will get back to you soon.');
+                    setTimeout(function () {
+                        if (btn) { btn.innerHTML = original; btn.disabled = false; }
+                        contactForm.reset();
+                    }, 2500);
+                })
+                .catch(function (err) {
+                    console.error('Form error:', err);
+                    if (btn) {
+                        btn.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Error';
+                        btn.style.opacity = '1';
+                    }
+                    showNotification('Something went wrong. Please try again or contact via email.');
+                    setTimeout(function () {
+                        if (btn) { btn.innerHTML = original; btn.disabled = false; }
+                    }, 2500);
+                });
             });
         }
 
