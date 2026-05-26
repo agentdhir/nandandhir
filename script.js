@@ -398,8 +398,6 @@
         }
 
         if (contactForm) {
-            // ——— Google Sheets Web App URL ———
-            // Replace this with your deployed Google Apps Script URL
             const GOOGLE_SHEET_URL = 'https://script.google.com/macros/s/AKfycbyF4Of20yctGHGQDkI56qM4kxhTkEkpqkqsOpT3ragJpksSTcqBOoqYVVGDt3Rlt9jU/exec';
 
             contactForm.addEventListener('submit', function (e) {
@@ -421,20 +419,22 @@
                     btn.style.opacity = '0.7';
                 }
 
-                // Build form data
-                const formData = new FormData();
-                formData.append('name', name.value.trim());
-                formData.append('email', email.value.trim());
-                formData.append('subject', subject ? subject.value.trim() : '');
-                formData.append('message', message.value.trim());
-                formData.append('timestamp', new Date().toLocaleString());
+                // Build URL-encoded data (works better with Google Apps Script)
+                const data = new URLSearchParams();
+                data.append('name', name.value.trim());
+                data.append('email', email.value.trim());
+                data.append('subject', subject ? subject.value.trim() : '');
+                data.append('message', message.value.trim());
+                data.append('timestamp', new Date().toLocaleString());
 
                 fetch(GOOGLE_SHEET_URL, {
                     method: 'POST',
-                    body: formData
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: data.toString()
                 })
-                .then(function (res) { return res.json(); })
-                .then(function (data) {
+                .then(function () {
+                    // no-cors returns opaque response, so we assume success
                     if (btn) {
                         btn.innerHTML = '<i class="fas fa-check"></i> Sent!';
                         btn.style.opacity = '1';
