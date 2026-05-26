@@ -29,9 +29,21 @@
     <!-- Loading Screen -->
     <div class="loader" id="loader">
         <div class="loader-content">
-            <div class="loader-logo">NKD</div>
+            <div class="loader-logo">
+                <svg class="logo-helix" viewBox="0 0 80 80" width="80" height="80">
+                    <defs>
+                        <linearGradient id="logoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#14b8a6"/>
+                            <stop offset="100%" stop-color="#0d9488"/>
+                        </linearGradient>
+                    </defs>
+                    <polygon points="40,2 74,21 74,59 40,78 6,59 6,21" fill="none" stroke="url(#logoGrad)" stroke-width="2" class="hex-border"/>
+                    <text x="40" y="47" text-anchor="middle" fill="url(#logoGrad)" font-family="Poppins, sans-serif" font-size="22" font-weight="800" letter-spacing="2">NKD</text>
+                </svg>
+            </div>
+            <p class="loader-name">Dr. Nandan Kumar Dhir</p>
             <div class="loader-bar"><div class="loader-progress"></div></div>
-            <p>Loading Excellence...</p>
+            <p class="loader-sub">Pharmaceutical Quality & Regulatory Excellence</p>
         </div>
     </div>
 
@@ -42,7 +54,21 @@
     <nav class="navbar" id="navbar">
         <div class="nav-container">
             <a href="#hero" class="nav-logo">
-                <span class="logo-monogram">NKD</span>
+                <div class="logo-mark">
+                    <svg viewBox="0 0 44 44" width="44" height="44" class="logo-svg">
+                        <defs>
+                            <linearGradient id="navLogoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#14b8a6"/>
+                                <stop offset="50%" stop-color="#0d9488"/>
+                                <stop offset="100%" stop-color="#0f766e"/>
+                            </linearGradient>
+                        </defs>
+                        <polygon points="22,1 41,11.5 41,32.5 22,43 3,32.5 3,11.5" fill="url(#navLogoGrad)" class="hex-fill"/>
+                        <polygon points="22,5 37,13.5 37,30.5 22,39 7,30.5 7,13.5" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="0.5"/>
+                        <text x="22" y="26" text-anchor="middle" fill="white" font-family="Poppins, sans-serif" font-size="11" font-weight="800" letter-spacing="1">NKD</text>
+                    </svg>
+                    <div class="logo-glow"></div>
+                </div>
                 <span class="logo-text">Dr. Nandan <span>Dhir</span></span>
             </a>
             <ul class="nav-links">
@@ -125,8 +151,56 @@
             </div>
             <div class="hero-visual animate-on-scroll" data-animation="fade-left">
                 <div class="hero-portrait">
-                    <div class="portrait-placeholder">
-                        <i class="fas fa-user-tie"></i>
+                    <div class="hero-orb">
+                        <!-- Animated SVG emblem -->
+                        <svg class="orb-svg" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                            <defs>
+                                <linearGradient id="orbGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" stop-color="#14b8a6"/>
+                                    <stop offset="100%" stop-color="#0f766e"/>
+                                </linearGradient>
+                                <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" stop-color="#e8c87a"/>
+                                    <stop offset="100%" stop-color="#d4a853"/>
+                                </linearGradient>
+                                <radialGradient id="bgGlow" cx="50%" cy="50%" r="50%">
+                                    <stop offset="0%" stop-color="rgba(13,148,136,0.12)"/>
+                                    <stop offset="100%" stop-color="transparent"/>
+                                </radialGradient>
+                            </defs>
+                            <!-- Background glow -->
+                            <circle cx="100" cy="100" r="95" fill="url(#bgGlow)"/>
+                            <!-- Outer hexagon -->
+                            <polygon points="100,8 178,33 178,133 100,192 22,133 22,33" fill="none" stroke="url(#orbGrad)" stroke-width="1.5" opacity="0.3" class="hex-outer"/>
+                            <!-- Inner hexagon -->
+                            <polygon points="100,28 160,48 160,120 100,168 40,120 40,48" fill="rgba(13,148,136,0.04)" stroke="url(#orbGrad)" stroke-width="1" opacity="0.5"/>
+                            <!-- Molecular bonds -->
+                            <line x1="100" y1="35" x2="155" y2="65" stroke="rgba(13,148,136,0.15)" stroke-width="0.8"/>
+                            <line x1="155" y1="65" x2="155" y2="115" stroke="rgba(13,148,136,0.12)" stroke-width="0.8"/>
+                            <line x1="155" y1="115" x2="100" y2="145" stroke="rgba(13,148,136,0.1)" stroke-width="0.8"/>
+                            <line x1="100" y1="145" x2="45" y2="115" stroke="rgba(13,148,136,0.12)" stroke-width="0.8"/>
+                            <line x1="45" y1="115" x2="45" y2="65" stroke="rgba(13,148,136,0.15)" stroke-width="0.8"/>
+                            <line x1="45" y1="65" x2="100" y2="35" stroke="rgba(13,148,136,0.15)" stroke-width="0.8"/>
+                            <!-- Molecular nodes -->
+                            <circle cx="100" cy="35" r="3.5" fill="url(#orbGrad)" opacity="0.7" class="mol-node"/>
+                            <circle cx="155" cy="65" r="3" fill="url(#orbGrad)" opacity="0.5"/>
+                            <circle cx="155" cy="115" r="2.5" fill="url(#goldGrad)" opacity="0.5"/>
+                            <circle cx="100" cy="145" r="3" fill="url(#orbGrad)" opacity="0.6"/>
+                            <circle cx="45" cy="115" r="2.5" fill="url(#goldGrad)" opacity="0.5"/>
+                            <circle cx="45" cy="65" r="3" fill="url(#orbGrad)" opacity="0.5"/>
+                            <!-- Center cross bonds -->
+                            <line x1="100" y1="35" x2="100" y2="145" stroke="rgba(13,148,136,0.06)" stroke-width="0.5"/>
+                            <line x1="45" y1="65" x2="155" y2="115" stroke="rgba(13,148,136,0.06)" stroke-width="0.5"/>
+                            <line x1="155" y1="65" x2="45" y2="115" stroke="rgba(13,148,136,0.06)" stroke-width="0.5"/>
+                            <!-- NKD Text -->
+                            <text x="100" y="96" text-anchor="middle" fill="url(#orbGrad)" font-family="Poppins, sans-serif" font-size="30" font-weight="800" letter-spacing="4" opacity="0.9">NKD</text>
+                            <!-- Subtitle -->
+                            <text x="100" y="115" text-anchor="middle" fill="rgba(255,255,255,0.3)" font-family="Inter, sans-serif" font-size="7" letter-spacing="3" text-transform="uppercase">PHARMA QUALITY</text>
+                        </svg>
+                        <!-- Orbiting dots -->
+                        <div class="orbit orbit-1"><div class="orbit-dot"></div></div>
+                        <div class="orbit orbit-2"><div class="orbit-dot dot-gold"></div></div>
+                        <div class="orbit orbit-3"><div class="orbit-dot dot-sm"></div></div>
                     </div>
                     <div class="portrait-ring"></div>
                     <div class="portrait-ring portrait-ring-2"></div>
@@ -198,9 +272,7 @@
             <div class="about-grid">
                 <div class="about-image-wrapper animate-on-scroll" data-animation="fade-right">
                     <div class="about-image">
-                        <div class="about-image-placeholder">
-                            <i class="fas fa-user-tie"></i>
-                        </div>
+                        <img src="dr-dhir.png" alt="Dr. Nandan Kumar Dhir — Pharmaceutical Quality Expert" class="about-photo" loading="lazy">
                         <div class="about-image-glow"></div>
                     </div>
                     <div class="about-experience-badge">
@@ -218,11 +290,11 @@
                     <p>For over 27 years, my mission has been to strengthen pharmaceutical quality systems in a way that goes beyond compliance checklists. I have always believed that quality is not just a regulatory requirement — it is a responsibility toward patient safety, product integrity, and organizational trust.</p>
                     <p>Throughout my career, I have focused on building robust GMP and Quality Management Systems that create sustainable compliance cultures. My journey spans leadership roles at <strong>Reckitt Benckiser</strong>, <strong>Glenmark Pharmaceuticals</strong>, <strong>Hetero Drugs</strong>, <strong>Ranbaxy Laboratories</strong>, and <strong>Torrent Pharmaceuticals</strong>.</p>
                     <ul class="about-highlights">
-                        <li><i class="fas fa-check-circle"></i> Successfully cleared USFDA unannounced audit with <strong>zero 483 observations</strong></li>
-                        <li><i class="fas fa-check-circle"></i> Doctoral researcher in <strong>Green Analytical Chemistry</strong> with 2 patents</li>
-                        <li><i class="fas fa-check-circle"></i> International speaker — Paris, Punjab, Dera Bassi conferences</li>
-                        <li><i class="fas fa-check-circle"></i> Expert in USFDA, EU, MHRA, TGA, ANVISA regulatory frameworks</li>
-                        <li><i class="fas fa-check-circle"></i> Leadership training from <strong>XLRI Jamshedpur</strong></li>
+                        <li><i class="fas fa-check-circle"></i><span>Successfully cleared USFDA unannounced audit with <strong>zero 483 observations</strong></span></li>
+                        <li><i class="fas fa-check-circle"></i><span>Doctoral researcher in <strong>Green Analytical Chemistry</strong> with 2 patents</span></li>
+                        <li><i class="fas fa-check-circle"></i><span>International speaker — Paris, Punjab, Dera Bassi conferences</span></li>
+                        <li><i class="fas fa-check-circle"></i><span>Expert in USFDA, EU, MHRA, TGA, ANVISA regulatory frameworks</span></li>
+                        <li><i class="fas fa-check-circle"></i><span>Leadership training from <strong>XLRI Jamshedpur</strong></span></li>
                     </ul>
                 </div>
             </div>
@@ -825,7 +897,13 @@
             <div class="footer-grid">
                 <div class="footer-about">
                     <a href="#hero" class="footer-logo">
-                        <span class="logo-monogram">NKD</span>
+                        <div class="logo-mark">
+                            <svg viewBox="0 0 44 44" width="44" height="44" class="logo-svg">
+                                <polygon points="22,1 41,11.5 41,32.5 22,43 3,32.5 3,11.5" fill="url(#navLogoGrad)"/>
+                                <polygon points="22,5 37,13.5 37,30.5 22,39 7,30.5 7,13.5" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="0.5"/>
+                                <text x="22" y="26" text-anchor="middle" fill="white" font-family="Poppins, sans-serif" font-size="11" font-weight="800" letter-spacing="1">NKD</text>
+                            </svg>
+                        </div>
                         <span class="logo-text">Dr. Nandan <span>Dhir</span></span>
                     </a>
                     <p>Dedicated to advancing pharmaceutical quality systems, building compliance cultures, and driving scientific innovation for global healthcare excellence.</p>
