@@ -419,22 +419,40 @@
                     btn.style.opacity = '0.7';
                 }
 
-                // Build URL-encoded data (works better with Google Apps Script)
-                const data = new URLSearchParams();
-                data.append('name', name.value.trim());
-                data.append('email', email.value.trim());
-                data.append('subject', subject ? subject.value.trim() : '');
-                data.append('message', message.value.trim());
-                data.append('timestamp', new Date().toLocaleString());
+                // Hidden iframe method — bypasses ALL CORS issues
+                var iframeName = 'hidden-form-iframe-' + Date.now();
+                var iframe = document.createElement('iframe');
+                iframe.name = iframeName;
+                iframe.style.display = 'none';
+                document.body.appendChild(iframe);
 
-                fetch(GOOGLE_SHEET_URL, {
-                    method: 'POST',
-                    mode: 'no-cors',
-                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                    body: data.toString()
-                })
-                .then(function () {
-                    // no-cors returns opaque response, so we assume success
+                var hiddenForm = document.createElement('form');
+                hiddenForm.method = 'POST';
+                hiddenForm.action = GOOGLE_SHEET_URL;
+                hiddenForm.target = iframeName;
+                hiddenForm.style.display = 'none';
+
+                var fields = {
+                    name: name.value.trim(),
+                    email: email.value.trim(),
+                    subject: subject ? subject.value.trim() : '',
+                    message: message.value.trim(),
+                    timestamp: new Date().toLocaleString()
+                };
+
+                for (var key in fields) {
+                    var input = document.createElement('input');
+                    input.type = 'hidden';
+                    input.name = key;
+                    input.value = fields[key];
+                    hiddenForm.appendChild(input);
+                }
+
+                document.body.appendChild(hiddenForm);
+                hiddenForm.submit();
+
+                // After submit, show success (iframe handles the actual POST)
+                iframe.addEventListener('load', function () {
                     if (btn) {
                         btn.innerHTML = '<i class="fas fa-check"></i> Sent!';
                         btn.style.opacity = '1';
@@ -444,18 +462,24 @@
                         if (btn) { btn.innerHTML = original; btn.disabled = false; }
                         contactForm.reset();
                     }, 2500);
-                })
-                .catch(function (err) {
-                    console.error('Form error:', err);
-                    if (btn) {
-                        btn.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Error';
-                        btn.style.opacity = '1';
-                    }
-                    showNotification('Something went wrong. Please try again or contact via email.');
+                    // Clean up
                     setTimeout(function () {
-                        if (btn) { btn.innerHTML = original; btn.disabled = false; }
-                    }, 2500);
+                        document.body.removeChild(iframe);
+                        document.body.removeChild(hiddenForm);
+                    }, 5000);
                 });
+
+                // Fallback timeout in case iframe load doesn't fire
+                setTimeout(function () {
+                    if (btn && btn.disabled) {
+                        btn.innerHTML = '<i class="fas fa-check"></i> Sent!';
+                        btn.style.opacity = '1';
+                        btn.disabled = false;
+                        showNotification('Message sent successfully! Dr. Dhir will get back to you soon.');
+                        contactForm.reset();
+                        setTimeout(function () { btn.innerHTML = original; }, 2000);
+                    }
+                }, 4000);
             });
         }
 
