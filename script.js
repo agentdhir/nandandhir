@@ -1,14 +1,11 @@
 /* ============================================
-   DR. NANDAN KUMAR DHIR — Premium Portfolio
-   v3.0 — Enhanced Dynamic JavaScript
+   DR. NANDAN KUMAR DHIR — ULTRA PREMIUM PORTFOLIO
+   v4.0 — Creative Dynamic JavaScript
    ============================================ */
 
 (function () {
     'use strict';
 
-    // =============================================
-    // Utility: Debounce
-    // =============================================
     function debounce(fn, delay) {
         let timer;
         return function (...args) {
@@ -17,9 +14,6 @@
         };
     }
 
-    // =============================================
-    // Utility: Throttle (for scroll handlers)
-    // =============================================
     function throttle(fn, limit) {
         let inThrottle;
         return function (...args) {
@@ -31,25 +25,21 @@
         };
     }
 
-    // =============================================
-    // DOM Ready
-    // =============================================
     document.addEventListener('DOMContentLoaded', function () {
 
         // =============================================
-        // 0. LOADING SCREEN
+        // 0. LOADER
         // =============================================
         const loader = document.getElementById('loader');
         if (loader) {
-            // Slightly longer for premium feel
             setTimeout(function () {
                 loader.classList.add('hidden');
                 document.body.classList.add('loaded');
-            }, 2400);
+            }, 2500);
         }
 
         // =============================================
-        // 1. PARTICLE CANVAS (Optimized)
+        // 1. PARTICLE CANVAS — Multi-color Aurora
         // =============================================
         const canvas = document.getElementById('particle-canvas');
         if (canvas) {
@@ -57,6 +47,15 @@
             let particles = [];
             let mouse = { x: null, y: null };
             let animFrameId = null;
+
+            // Color palette for particles
+            const particleColors = [
+                'rgba(14, 165, 233,',   // Blue
+                'rgba(20, 184, 166,',   // Teal
+                'rgba(139, 92, 246,',   // Purple
+                'rgba(245, 158, 11,',   // Gold
+                'rgba(255, 255, 255,',  // White
+            ];
 
             function resizeCanvas() {
                 const hero = canvas.parentElement;
@@ -67,40 +66,39 @@
             function createParticles() {
                 particles = [];
                 const isMobile = window.innerWidth < 768;
-                const count = isMobile ? 20 : 50;
+                const count = isMobile ? 22 : 55;
 
                 for (let i = 0; i < count; i++) {
-                    const isTeal = Math.random() > 0.4;
+                    const colorIndex = Math.random() < 0.4 ? 0 : Math.random() < 0.6 ? 1 : Math.random() < 0.8 ? 4 : Math.random() < 0.9 ? 2 : 3;
                     particles.push({
                         x: Math.random() * canvas.width,
                         y: Math.random() * canvas.height,
-                        radius: Math.random() * 2.2 + 0.4,
-                        vx: (Math.random() - 0.5) * 0.3,
-                        vy: (Math.random() - 0.5) * 0.3,
+                        radius: Math.random() * 2.5 + 0.3,
+                        vx: (Math.random() - 0.5) * 0.28,
+                        vy: (Math.random() - 0.5) * 0.28,
                         opacity: Math.random() * 0.35 + 0.08,
-                        color: isTeal ? 'rgba(13, 148, 136,' : 'rgba(255, 255, 255,',
+                        color: particleColors[colorIndex],
                         pulse: Math.random() * Math.PI * 2,
-                        pulseSpeed: 0.008 + Math.random() * 0.015
+                        pulseSpeed: 0.006 + Math.random() * 0.012
                     });
                 }
             }
 
             function drawParticles() {
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-                const connectionDist = window.innerWidth < 768 ? 100 : 120;
+                const connectionDist = window.innerWidth < 768 ? 90 : 115;
 
                 particles.forEach(function (p, i) {
                     p.pulse += p.pulseSpeed;
-                    const dynamicOpacity = p.opacity + Math.sin(p.pulse) * 0.08;
+                    const dynamicOpacity = p.opacity + Math.sin(p.pulse) * 0.1;
 
-                    // Mouse interaction
+                    // Mouse push
                     if (mouse.x && mouse.y) {
                         const dx = p.x - mouse.x;
                         const dy = p.y - mouse.y;
                         const dist = Math.sqrt(dx * dx + dy * dy);
-                        if (dist < 110) {
-                            const force = (110 - dist) / 110 * 0.25;
+                        if (dist < 120) {
+                            const force = (120 - dist) / 120 * 0.3;
                             p.x += (dx / dist) * force;
                             p.y += (dy / dist) * force;
                         }
@@ -108,28 +106,26 @@
 
                     p.x += p.vx;
                     p.y += p.vy;
-
-                    // Wrap
                     if (p.x < -10) p.x = canvas.width + 10;
                     if (p.x > canvas.width + 10) p.x = -10;
                     if (p.y < -10) p.y = canvas.height + 10;
                     if (p.y > canvas.height + 10) p.y = -10;
 
-                    // Draw particle
+                    // Draw
                     ctx.beginPath();
                     ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
                     ctx.fillStyle = p.color + Math.max(0, dynamicOpacity) + ')';
                     ctx.fill();
 
-                    // Glow for larger particles
-                    if (p.radius > 1.4) {
+                    // Glow
+                    if (p.radius > 1.3) {
                         ctx.beginPath();
-                        ctx.arc(p.x, p.y, p.radius * 3, 0, Math.PI * 2);
-                        ctx.fillStyle = p.color + (dynamicOpacity * 0.06) + ')';
+                        ctx.arc(p.x, p.y, p.radius * 3.5, 0, Math.PI * 2);
+                        ctx.fillStyle = p.color + (dynamicOpacity * 0.05) + ')';
                         ctx.fill();
                     }
 
-                    // Connections
+                    // Connections with gradient
                     for (let j = i + 1; j < particles.length; j++) {
                         const p2 = particles[j];
                         const dx2 = p.x - p2.x;
@@ -137,11 +133,14 @@
                         const dist2 = Math.sqrt(dx2 * dx2 + dy2 * dy2);
 
                         if (dist2 < connectionDist) {
-                            const lineOpacity = 0.05 * (1 - dist2 / connectionDist);
+                            const lineOpacity = 0.04 * (1 - dist2 / connectionDist);
+                            const gradient = ctx.createLinearGradient(p.x, p.y, p2.x, p2.y);
+                            gradient.addColorStop(0, p.color + lineOpacity + ')');
+                            gradient.addColorStop(1, p2.color + lineOpacity + ')');
                             ctx.beginPath();
                             ctx.moveTo(p.x, p.y);
                             ctx.lineTo(p2.x, p2.y);
-                            ctx.strokeStyle = 'rgba(13, 148, 136,' + lineOpacity + ')';
+                            ctx.strokeStyle = gradient;
                             ctx.lineWidth = 0.5;
                             ctx.stroke();
                         }
@@ -151,22 +150,19 @@
                 animFrameId = requestAnimationFrame(drawParticles);
             }
 
-            // Pause animation when hero not visible
+            // Pause when hero not visible
             const heroSection = document.getElementById('hero');
             if (heroSection && 'IntersectionObserver' in window) {
-                const heroObserver = new IntersectionObserver(function (entries) {
+                const heroObs = new IntersectionObserver(function (entries) {
                     entries.forEach(function (entry) {
                         if (entry.isIntersecting) {
                             if (!animFrameId) drawParticles();
                         } else {
-                            if (animFrameId) {
-                                cancelAnimationFrame(animFrameId);
-                                animFrameId = null;
-                            }
+                            if (animFrameId) { cancelAnimationFrame(animFrameId); animFrameId = null; }
                         }
                     });
                 }, { threshold: 0.05 });
-                heroObserver.observe(heroSection);
+                heroObs.observe(heroSection);
             }
 
             canvas.addEventListener('mousemove', function (e) {
@@ -174,35 +170,27 @@
                 mouse.x = e.clientX - rect.left;
                 mouse.y = e.clientY - rect.top;
             });
-            canvas.addEventListener('mouseleave', function () {
-                mouse.x = null;
-                mouse.y = null;
-            });
+            canvas.addEventListener('mouseleave', function () { mouse.x = null; mouse.y = null; });
 
             resizeCanvas();
             createParticles();
             drawParticles();
-
-            window.addEventListener('resize', debounce(function () {
-                resizeCanvas();
-                createParticles();
-            }, 300));
+            window.addEventListener('resize', debounce(function () { resizeCanvas(); createParticles(); }, 300));
         }
 
         // =============================================
-        // 2. SCROLL PROGRESS BAR
+        // 2. SCROLL PROGRESS
         // =============================================
         const scrollProgress = document.getElementById('scroll-progress');
         function updateScrollProgress() {
             if (!scrollProgress) return;
             const scrollTop = window.scrollY;
             const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-            const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
-            scrollProgress.style.width = progress + '%';
+            scrollProgress.style.width = (docHeight > 0 ? (scrollTop / docHeight) * 100 : 0) + '%';
         }
 
         // =============================================
-        // 3. STICKY NAVBAR + ACTIVE LINK
+        // 3. NAVBAR + ACTIVE LINK
         // =============================================
         const navbar = document.querySelector('.navbar');
         const navLinks = document.querySelectorAll('.nav-link');
@@ -210,34 +198,19 @@
 
         function handleScroll() {
             const scrollY = window.scrollY;
+            if (navbar) navbar.classList.toggle('scrolled', scrollY > 60);
 
-            // Navbar background
-            if (navbar) {
-                navbar.classList.toggle('scrolled', scrollY > 60);
-            }
-
-            // Active nav link
             let current = '';
             sections.forEach(function (section) {
-                const sectionTop = section.offsetTop - 140;
-                if (scrollY >= sectionTop) {
-                    current = section.getAttribute('id');
-                }
+                if (scrollY >= section.offsetTop - 140) current = section.getAttribute('id');
             });
-
             navLinks.forEach(function (link) {
                 link.classList.remove('active');
-                if (link.getAttribute('href') === '#' + current) {
-                    link.classList.add('active');
-                }
+                if (link.getAttribute('href') === '#' + current) link.classList.add('active');
             });
 
-            // Back to top
             const backToTop = document.querySelector('.back-to-top');
-            if (backToTop) {
-                backToTop.classList.toggle('visible', scrollY > 500);
-            }
-
+            if (backToTop) backToTop.classList.toggle('visible', scrollY > 500);
             updateScrollProgress();
         }
 
@@ -251,15 +224,12 @@
             anchor.addEventListener('click', function (e) {
                 const targetId = this.getAttribute('href');
                 if (targetId === '#') return;
-
                 const target = document.querySelector(targetId);
                 if (target) {
                     e.preventDefault();
                     const navHeight = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--navbar-height')) || 76;
-                    const targetPosition = target.getBoundingClientRect().top + window.scrollY - navHeight;
-                    window.scrollTo({ top: targetPosition, behavior: 'smooth' });
+                    window.scrollTo({ top: target.getBoundingClientRect().top + window.scrollY - navHeight, behavior: 'smooth' });
 
-                    // Close mobile nav
                     const mobileNav = document.querySelector('.mobile-nav');
                     const mobileToggle = document.querySelector('.mobile-toggle');
                     if (mobileNav && mobileNav.classList.contains('active')) {
@@ -272,7 +242,7 @@
         });
 
         // =============================================
-        // 5. MOBILE NAVIGATION
+        // 5. MOBILE NAV
         // =============================================
         const mobileToggle = document.querySelector('.mobile-toggle');
         const mobileNav = document.querySelector('.mobile-nav');
@@ -283,8 +253,6 @@
                 mobileNav.classList.toggle('active');
                 document.body.style.overflow = mobileNav.classList.contains('active') ? 'hidden' : '';
             });
-
-            // Close on overlay click
             mobileNav.addEventListener('click', function (e) {
                 if (e.target === mobileNav) {
                     mobileToggle.classList.remove('active');
@@ -292,8 +260,6 @@
                     document.body.style.overflow = '';
                 }
             });
-
-            // Close on Escape
             document.addEventListener('keydown', function (e) {
                 if (e.key === 'Escape' && mobileNav.classList.contains('active')) {
                     mobileToggle.classList.remove('active');
@@ -304,7 +270,7 @@
         }
 
         // =============================================
-        // 6. SCROLL-TRIGGERED ANIMATIONS
+        // 6. SCROLL ANIMATIONS
         // =============================================
         const animatedElements = document.querySelectorAll('.animate-on-scroll');
 
@@ -316,18 +282,14 @@
                         observer.unobserve(entry.target);
                     }
                 });
-            }, {
-                threshold: 0.08,
-                rootMargin: '0px 0px -40px 0px'
-            });
-
+            }, { threshold: 0.08, rootMargin: '0px 0px -30px 0px' });
             animatedElements.forEach(function (el) { observer.observe(el); });
         } else {
             animatedElements.forEach(function (el) { el.classList.add('animated'); });
         }
 
         // =============================================
-        // 7. ANIMATED COUNTERS
+        // 7. COUNTERS
         // =============================================
         const counters = document.querySelectorAll('.counter');
         let countersAnimated = false;
@@ -339,20 +301,12 @@
                 if (isNaN(target)) return;
                 const duration = 2200;
                 const start = performance.now();
-
-                function easeOutQuart(t) {
-                    return 1 - Math.pow(1 - t, 4);
-                }
-
+                function easeOutQuart(t) { return 1 - Math.pow(1 - t, 4); }
                 function update(now) {
-                    const elapsed = now - start;
-                    const progress = Math.min(elapsed / duration, 1);
+                    const progress = Math.min((now - start) / duration, 1);
                     counter.textContent = Math.floor(easeOutQuart(progress) * target);
-                    if (progress < 1) {
-                        requestAnimationFrame(update);
-                    } else {
-                        counter.textContent = target;
-                    }
+                    if (progress < 1) requestAnimationFrame(update);
+                    else counter.textContent = target;
                 }
                 requestAnimationFrame(update);
             });
@@ -361,15 +315,12 @@
 
         const counterGrid = document.querySelector('.counter-grid');
         if (counterGrid && 'IntersectionObserver' in window) {
-            const counterObserver = new IntersectionObserver(function (entries) {
+            const cObs = new IntersectionObserver(function (entries) {
                 entries.forEach(function (entry) {
-                    if (entry.isIntersecting) {
-                        animateCounters();
-                        counterObserver.unobserve(entry.target);
-                    }
+                    if (entry.isIntersecting) { animateCounters(); cObs.unobserve(entry.target); }
                 });
             }, { threshold: 0.25 });
-            counterObserver.observe(counterGrid);
+            cObs.observe(counterGrid);
         }
 
         // =============================================
@@ -388,18 +339,16 @@
                     if (filter === 'all' || card.getAttribute('data-category') === filter) {
                         card.classList.remove('hidden');
                         card.style.opacity = '0';
-                        card.style.transform = 'translateY(12px)';
+                        card.style.transform = 'translateY(15px) scale(0.97)';
                         setTimeout(function () {
-                            card.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
+                            card.style.transition = 'opacity 0.5s cubic-bezier(0.19, 1, 0.22, 1), transform 0.5s cubic-bezier(0.19, 1, 0.22, 1)';
                             card.style.opacity = '1';
-                            card.style.transform = 'translateY(0)';
-                        }, 40 + index * 60);
+                            card.style.transform = 'translateY(0) scale(1)';
+                        }, 40 + index * 70);
                     } else {
                         card.style.opacity = '0';
-                        card.style.transform = 'translateY(8px)';
-                        setTimeout(function () {
-                            card.classList.add('hidden');
-                        }, 250);
+                        card.style.transform = 'scale(0.95)';
+                        setTimeout(function () { card.classList.add('hidden'); }, 300);
                     }
                 });
             });
@@ -420,7 +369,6 @@
         // =============================================
         const cookieBanner = document.getElementById('cookie-banner');
         const cookieAccept = document.getElementById('cookie-accept');
-
         if (cookieBanner) {
             if (localStorage.getItem('cookiesAccepted') === 'true') {
                 cookieBanner.classList.add('hidden');
@@ -470,18 +418,14 @@
                         btn.innerHTML = '<i class="fas fa-check"></i> Sent!';
                         btn.style.opacity = '1';
                         showNotification('Message sent successfully! Dr. Dhir will get back to you soon.');
-                        setTimeout(function () {
-                            btn.innerHTML = original;
-                            btn.disabled = false;
-                            contactForm.reset();
-                        }, 2500);
+                        setTimeout(function () { btn.innerHTML = original; btn.disabled = false; contactForm.reset(); }, 2500);
                     }, 1500);
                 }
             });
         }
 
         // =============================================
-        // 12. NEWSLETTER FORM
+        // 12. NEWSLETTER
         // =============================================
         const newsletterForm = document.getElementById('newsletter-form');
         if (newsletterForm) {
@@ -518,15 +462,14 @@
                 if (isDeleting) {
                     typingElement.textContent = currentPhrase.substring(0, charIndex - 1);
                     charIndex--;
-                    typeSpeed = 30;
+                    typeSpeed = 28;
                 } else {
                     typingElement.textContent = currentPhrase.substring(0, charIndex + 1);
                     charIndex++;
-                    typeSpeed = 70;
+                    typeSpeed = 68;
                 }
-
                 if (!isDeleting && charIndex === currentPhrase.length) {
-                    typeSpeed = 2400;
+                    typeSpeed = 2500;
                     isDeleting = true;
                 } else if (isDeleting && charIndex === 0) {
                     isDeleting = false;
@@ -539,7 +482,7 @@
         }
 
         // =============================================
-        // 14. MOUSE FOLLOWER (Desktop Only)
+        // 14. MOUSE FOLLOWER
         // =============================================
         const follower = document.getElementById('mouse-follower');
         if (follower && window.innerWidth >= 1024) {
@@ -551,33 +494,33 @@
             });
 
             function animateFollower() {
-                followerX += (mouseX - followerX) * 0.12;
-                followerY += (mouseY - followerY) * 0.12;
+                followerX += (mouseX - followerX) * 0.1;
+                followerY += (mouseY - followerY) * 0.1;
                 follower.style.left = followerX + 'px';
                 follower.style.top = followerY + 'px';
                 requestAnimationFrame(animateFollower);
             }
             animateFollower();
 
-            const interactives = document.querySelectorAll('a, button, .expertise-card, .publication-card, .blog-card, .achievement-card, .contact-card, .approval-card, .edu-card');
+            const interactives = document.querySelectorAll('a, button, .expertise-card, .publication-card, .blog-card, .achievement-card, .contact-card, .approval-card, .edu-card, .pillar-card, .training-tag');
             interactives.forEach(function (el) {
                 el.addEventListener('mouseenter', function () {
-                    follower.style.width = '40px';
-                    follower.style.height = '40px';
-                    follower.style.borderColor = 'rgba(13, 148, 136, 0.5)';
+                    follower.style.width = '45px';
+                    follower.style.height = '45px';
+                    follower.style.borderColor = 'rgba(14, 165, 233, 0.4)';
                     follower.style.borderWidth = '1px';
                 });
                 el.addEventListener('mouseleave', function () {
                     follower.style.width = '20px';
                     follower.style.height = '20px';
-                    follower.style.borderColor = 'rgba(13, 148, 136, 0.35)';
+                    follower.style.borderColor = 'rgba(14, 165, 233, 0.3)';
                     follower.style.borderWidth = '1.5px';
                 });
             });
         }
 
         // =============================================
-        // 15. CARD TILT EFFECT (Desktop Only)
+        // 15. CARD TILT — Premium 3D Effect
         // =============================================
         if (window.innerWidth >= 1024) {
             const tiltCards = document.querySelectorAll('[data-tilt]');
@@ -588,38 +531,57 @@
                     const y = e.clientY - rect.top;
                     const centerX = rect.width / 2;
                     const centerY = rect.height / 2;
-                    const rotateX = (y - centerY) / centerY * -3;
-                    const rotateY = (x - centerX) / centerX * 3;
-                    card.style.transform = 'perspective(900px) rotateX(' + rotateX + 'deg) rotateY(' + rotateY + 'deg) translateY(-5px)';
+                    const rotateX = (y - centerY) / centerY * -3.5;
+                    const rotateY = (x - centerX) / centerX * 3.5;
+                    card.style.transform = 'perspective(800px) rotateX(' + rotateX + 'deg) rotateY(' + rotateY + 'deg) translateY(-6px) scale(1.01)';
                 });
                 card.addEventListener('mouseleave', function () {
                     card.style.transform = '';
-                    card.style.transition = 'transform 0.4s ease';
-                    setTimeout(() => card.style.transition = '', 400);
+                    card.style.transition = 'transform 0.5s cubic-bezier(0.19, 1, 0.22, 1)';
+                    setTimeout(() => card.style.transition = '', 500);
                 });
             });
         }
 
         // =============================================
-        // 16. PARALLAX ON DECORATIVE ELEMENTS
+        // 16. PARALLAX
         // =============================================
         const heroDecos = document.querySelectorAll('.hero-deco');
         if (heroDecos.length > 0 && window.innerWidth >= 768) {
             window.addEventListener('scroll', throttle(function () {
                 const scrollY = window.scrollY;
-                if (scrollY > window.innerHeight) return; // Skip when hero out of view
+                if (scrollY > window.innerHeight) return;
                 heroDecos.forEach(function (deco, i) {
-                    const speed = 0.12 + (i * 0.04);
-                    deco.style.transform = 'translateY(' + (scrollY * speed) + 'px)';
+                    deco.style.transform = 'translateY(' + (scrollY * (0.1 + i * 0.04)) + 'px)';
                 });
             }, 16), { passive: true });
         }
 
         // =============================================
-        // 17. COUNTER GRADIENT ANIMATION
+        // 17. MAGNETIC BUTTONS
+        // =============================================
+        if (window.innerWidth >= 1024) {
+            const magneticBtns = document.querySelectorAll('.btn-primary, .btn-secondary');
+            magneticBtns.forEach(function (btn) {
+                btn.addEventListener('mousemove', function (e) {
+                    const rect = btn.getBoundingClientRect();
+                    const x = e.clientX - rect.left - rect.width / 2;
+                    const y = e.clientY - rect.top - rect.height / 2;
+                    btn.style.transform = 'translate(' + (x * 0.15) + 'px, ' + (y * 0.15 - 3) + 'px) scale(1.03)';
+                });
+                btn.addEventListener('mouseleave', function () {
+                    btn.style.transform = '';
+                    btn.style.transition = 'all 0.4s cubic-bezier(0.19, 1, 0.22, 1)';
+                    setTimeout(() => btn.style.transition = '', 400);
+                });
+            });
+        }
+
+        // =============================================
+        // 18. COUNTER BG ANIMATION
         // =============================================
         if (counterGrid) {
-            const counterObserver2 = new IntersectionObserver(function (entries) {
+            const cObs2 = new IntersectionObserver(function (entries) {
                 entries.forEach(function (entry) {
                     if (entry.isIntersecting) {
                         entry.target.style.backgroundSize = '200% 200%';
@@ -627,21 +589,34 @@
                     }
                 });
             }, { threshold: 0.25 });
-            counterObserver2.observe(counterGrid);
+            cObs2.observe(counterGrid);
         }
 
         // =============================================
-        // 18. FOCUS MANAGEMENT FOR ACCESSIBILITY
+        // 19. KEYBOARD A11Y
         // =============================================
-        // Add focus-visible outlines for keyboard users
         document.addEventListener('keydown', function (e) {
-            if (e.key === 'Tab') {
-                document.body.classList.add('keyboard-nav');
-            }
+            if (e.key === 'Tab') document.body.classList.add('keyboard-nav');
         });
         document.addEventListener('mousedown', function () {
             document.body.classList.remove('keyboard-nav');
         });
+
+        // =============================================
+        // 20. WAVE DIVIDER PARALLAX
+        // =============================================
+        const waveDividers = document.querySelectorAll('.wave-divider');
+        if (waveDividers.length > 0 && window.innerWidth >= 768) {
+            window.addEventListener('scroll', throttle(function () {
+                waveDividers.forEach(function (wave) {
+                    const rect = wave.getBoundingClientRect();
+                    if (rect.top < window.innerHeight && rect.bottom > 0) {
+                        const offset = (rect.top / window.innerHeight) * 10;
+                        wave.querySelector('svg').style.transform = 'translateY(' + offset + 'px)';
+                    }
+                });
+            }, 32), { passive: true });
+        }
 
     }); // End DOMContentLoaded
 })(); // End IIFE
