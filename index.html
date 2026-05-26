@@ -3,15 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Dr. Nandan Kumar Dhir — Pharmaceutical Quality & Regulatory Compliance Expert with 27+ years of experience in GMP, QMS, Data Integrity, and scientific leadership across multinational organizations.">
-    <meta name="keywords" content="Dr. Nandan Kumar Dhir, Pharmaceutical Quality Expert, GMP Specialist, Pharma Regulatory Expert, Pharmaceutical Consultant, Data Integrity Expert, Pharma Compliance Leader, Green Analytical Chemistry, USFDA Audit Consultant">
+    <meta name="description" content="Dr. Nandan Kumar Dhir — Pharmaceutical Quality & Regulatory Compliance Executive with 27+ years of expertise in GMP, QMS, Data Integrity, and scientific leadership across multinational organizations.">
+    <meta name="keywords" content="Dr. Nandan Kumar Dhir, Pharmaceutical Quality Expert, GMP Specialist, Pharma Regulatory Expert, Pharmaceutical Consultant, Data Integrity Expert, Pharma Compliance Leader, Green Analytical Chemistry, USFDA Audit Consultant, Quality Management Systems">
     <meta name="author" content="Dr. Nandan Kumar Dhir">
     <meta name="robots" content="index, follow">
     <meta property="og:title" content="Dr. Nandan Kumar Dhir | Pharmaceutical Quality & Regulatory Expert">
     <meta property="og:description" content="27+ years of expertise in pharmaceutical quality systems, GMP compliance, regulatory excellence, data integrity, and scientific leadership.">
     <meta property="og:type" content="website">
     <meta name="twitter:card" content="summary_large_image">
-    <title>Dr. Nandan Kumar Dhir | Pharmaceutical Quality & Regulatory Compliance Leader | 27+ Years</title>
+    <meta name="theme-color" content="#0a1628">
+    <title>Dr. Nandan Kumar Dhir | Pharmaceutical Quality & Regulatory Compliance Leader</title>
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -51,9 +52,9 @@
     <div class="scroll-progress" id="scroll-progress"></div>
 
     <!-- ===== NAVBAR ===== -->
-    <nav class="navbar" id="navbar">
+    <nav class="navbar" id="navbar" role="navigation" aria-label="Primary navigation">
         <div class="nav-container">
-            <a href="#hero" class="nav-logo">
+            <a href="#hero" class="nav-logo" aria-label="Dr. Nandan Dhir - Home">
                 <div class="logo-mark">
                     <svg viewBox="0 0 44 44" width="44" height="44" class="logo-svg">
                         <defs>
@@ -90,7 +91,7 @@
     </nav>
 
     <!-- Mobile Nav Overlay -->
-    <div class="mobile-nav">
+    <div class="mobile-nav" role="dialog" aria-label="Mobile navigation">
         <ul>
             <li><a href="#hero" class="mobile-nav-link">Home</a></li>
             <li><a href="#about" class="mobile-nav-link">About</a></li>
@@ -108,7 +109,7 @@
         <canvas id="particle-canvas"></canvas>
         <div class="hero-overlay"></div>
 
-        <!-- Animated Decorative Elements -->
+        <!-- Decorative Elements -->
         <div class="hero-deco hero-deco-1"></div>
         <div class="hero-deco hero-deco-2"></div>
         <div class="hero-deco hero-deco-3"></div>
@@ -127,7 +128,7 @@
                 </span>
                 <h1>Dr. Nandan Kumar Dhir</h1>
                 <p class="hero-tagline">Pharmaceutical Quality & Regulatory Excellence</p>
-                <p class="hero-description">Accomplished Pharmaceutical Executive with over 27 years of experience in quality assurance, regulatory compliance, and scientific leadership across multinational organizations including <strong>Reckitt</strong>, <strong>Glenmark</strong>, <strong>Ranbaxy</strong>, and <strong>Hetero Drugs</strong>.</p>
+                <p class="hero-description">Accomplished Pharmaceutical Executive with over 27 years of expertise in quality assurance, regulatory compliance, and scientific leadership across multinational organizations including <strong>Reckitt</strong>, <strong>Glenmark</strong>, <strong>Ranbaxy</strong>, and <strong>Hetero Drugs</strong>.</p>
                 <div class="hero-typing">
                     <span class="typing-label">Specializing in</span>
                     <span class="typing-text" id="typing-text"></span>
@@ -141,7 +142,7 @@
                         <i class="fas fa-lightbulb"></i> Read Insights
                     </a>
                 </div>
-                <!-- Regulatory Approval Badges -->
+                <!-- Regulatory Badges -->
                 <div class="hero-reg-badges">
                     <div class="reg-badge" title="USFDA Approved"><i class="fas fa-shield-halved"></i> USFDA</div>
                     <div class="reg-badge" title="EU GMP Approved"><i class="fas fa-certificate"></i> EU GMP</div>
@@ -152,7 +153,6 @@
             <div class="hero-visual animate-on-scroll" data-animation="fade-left">
                 <div class="hero-portrait">
                     <div class="hero-orb">
-                        <!-- Animated SVG emblem -->
                         <svg class="orb-svg" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
                             <defs>
                                 <linearGradient id="orbGrad" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -160,51 +160,41 @@
                                     <stop offset="100%" stop-color="#0f766e"/>
                                 </linearGradient>
                                 <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                                    <stop offset="0%" stop-color="#e8c87a"/>
-                                    <stop offset="100%" stop-color="#d4a853"/>
+                                    <stop offset="0%" stop-color="#dfc176"/>
+                                    <stop offset="100%" stop-color="#c9a84c"/>
                                 </linearGradient>
                                 <radialGradient id="bgGlow" cx="50%" cy="50%" r="50%">
-                                    <stop offset="0%" stop-color="rgba(13,148,136,0.12)"/>
+                                    <stop offset="0%" stop-color="rgba(13,148,136,0.1)"/>
                                     <stop offset="100%" stop-color="transparent"/>
                                 </radialGradient>
                             </defs>
-                            <!-- Background glow -->
                             <circle cx="100" cy="100" r="95" fill="url(#bgGlow)"/>
-                            <!-- Outer hexagon -->
                             <polygon points="100,8 178,33 178,133 100,192 22,133 22,33" fill="none" stroke="url(#orbGrad)" stroke-width="1.5" opacity="0.3" class="hex-outer"/>
-                            <!-- Inner hexagon -->
                             <polygon points="100,28 160,48 160,120 100,168 40,120 40,48" fill="rgba(13,148,136,0.04)" stroke="url(#orbGrad)" stroke-width="1" opacity="0.5"/>
-                            <!-- Molecular bonds -->
                             <line x1="100" y1="35" x2="155" y2="65" stroke="rgba(13,148,136,0.15)" stroke-width="0.8"/>
                             <line x1="155" y1="65" x2="155" y2="115" stroke="rgba(13,148,136,0.12)" stroke-width="0.8"/>
                             <line x1="155" y1="115" x2="100" y2="145" stroke="rgba(13,148,136,0.1)" stroke-width="0.8"/>
                             <line x1="100" y1="145" x2="45" y2="115" stroke="rgba(13,148,136,0.12)" stroke-width="0.8"/>
                             <line x1="45" y1="115" x2="45" y2="65" stroke="rgba(13,148,136,0.15)" stroke-width="0.8"/>
                             <line x1="45" y1="65" x2="100" y2="35" stroke="rgba(13,148,136,0.15)" stroke-width="0.8"/>
-                            <!-- Molecular nodes -->
                             <circle cx="100" cy="35" r="3.5" fill="url(#orbGrad)" opacity="0.7" class="mol-node"/>
                             <circle cx="155" cy="65" r="3" fill="url(#orbGrad)" opacity="0.5"/>
                             <circle cx="155" cy="115" r="2.5" fill="url(#goldGrad)" opacity="0.5"/>
                             <circle cx="100" cy="145" r="3" fill="url(#orbGrad)" opacity="0.6"/>
                             <circle cx="45" cy="115" r="2.5" fill="url(#goldGrad)" opacity="0.5"/>
                             <circle cx="45" cy="65" r="3" fill="url(#orbGrad)" opacity="0.5"/>
-                            <!-- Center cross bonds -->
                             <line x1="100" y1="35" x2="100" y2="145" stroke="rgba(13,148,136,0.06)" stroke-width="0.5"/>
                             <line x1="45" y1="65" x2="155" y2="115" stroke="rgba(13,148,136,0.06)" stroke-width="0.5"/>
                             <line x1="155" y1="65" x2="45" y2="115" stroke="rgba(13,148,136,0.06)" stroke-width="0.5"/>
-                            <!-- NKD Text -->
                             <text x="100" y="96" text-anchor="middle" fill="url(#orbGrad)" font-family="Poppins, sans-serif" font-size="30" font-weight="800" letter-spacing="4" opacity="0.9">NKD</text>
-                            <!-- Subtitle -->
                             <text x="100" y="115" text-anchor="middle" fill="rgba(255,255,255,0.3)" font-family="Inter, sans-serif" font-size="7" letter-spacing="3" text-transform="uppercase">PHARMA QUALITY</text>
                         </svg>
-                        <!-- Orbiting dots -->
                         <div class="orbit orbit-1"><div class="orbit-dot"></div></div>
                         <div class="orbit orbit-2"><div class="orbit-dot dot-gold"></div></div>
                         <div class="orbit orbit-3"><div class="orbit-dot dot-sm"></div></div>
                     </div>
                     <div class="portrait-ring"></div>
                     <div class="portrait-ring portrait-ring-2"></div>
-                    <!-- Floating achievement cards around portrait -->
                     <div class="portrait-float-card pf-1">
                         <i class="fas fa-award"></i>
                         <span>Ph.D. Chemistry</span>
@@ -260,7 +250,6 @@
 
     <!-- ===== ABOUT SECTION ===== -->
     <section id="about" class="about-section">
-        <!-- Decorative shapes -->
         <div class="section-deco section-deco-tl"></div>
         <div class="section-deco section-deco-br"></div>
 
@@ -332,7 +321,7 @@
                 </div>
             </div>
 
-            <!-- Animated Counters -->
+            <!-- Counters -->
             <div class="counter-grid animate-on-scroll">
                 <div class="counter-item">
                     <div class="counter-icon"><i class="fas fa-calendar-check"></i></div>
@@ -366,7 +355,7 @@
                 </div>
             </div>
 
-            <!-- Education Strip -->
+            <!-- Education -->
             <div class="education-strip animate-on-scroll">
                 <h4><i class="fas fa-graduation-cap"></i> Academic Credentials</h4>
                 <div class="edu-cards">
@@ -400,19 +389,19 @@
         <div class="container">
             <div class="section-header animate-on-scroll">
                 <span class="section-label">Expertise</span>
-                <h2>Core Competencies & Technical Skills</h2>
+                <h2>Core Competencies & Technical Mastery</h2>
             </div>
             <div class="expertise-grid">
                 <div class="expertise-card animate-on-scroll" data-tilt>
                     <div class="expertise-icon"><i class="fas fa-industry"></i></div>
                     <h3>Pharmaceutical Quality Leadership</h3>
-                    <p>Spearheading comprehensive EOHS and Quality systems across multiple sites, driving compliance with regulatory standards and optimizing resource utilization.</p>
+                    <p>Spearheading comprehensive EOHS and Quality systems across multiple manufacturing sites, driving regulatory compliance and optimizing operational excellence.</p>
                     <div class="card-shine"></div>
                 </div>
                 <div class="expertise-card animate-on-scroll" data-tilt>
                     <div class="expertise-icon"><i class="fas fa-globe-americas"></i></div>
                     <h3>Global Regulatory Compliance</h3>
-                    <p>Expert navigator of USFDA, EU, MHRA, TGA, ANVISA, and Russia regulatory submissions and approvals. Successfully cleared USFDA unannounced audit with zero 483 observations.</p>
+                    <p>Expert navigator of USFDA, EU, MHRA, TGA, ANVISA, and Russia regulatory submissions. Successfully cleared USFDA unannounced audit with zero 483 observations.</p>
                     <div class="card-shine"></div>
                 </div>
                 <div class="expertise-card animate-on-scroll" data-tilt>
@@ -459,7 +448,7 @@
                 </div>
             </div>
 
-            <!-- Technical Tools Strip -->
+            <!-- Technical Tools -->
             <div class="tech-strip animate-on-scroll">
                 <h4>Tools & Software</h4>
                 <div class="tech-tags">
@@ -471,7 +460,7 @@
         </div>
     </section>
 
-    <!-- ===== PUBLICATIONS & PATENTS SECTION ===== -->
+    <!-- ===== PUBLICATIONS & PATENTS ===== -->
     <section id="publications" class="publications-section">
         <div class="container">
             <div class="section-header animate-on-scroll">
@@ -486,7 +475,6 @@
                 <button class="filter-btn" data-filter="research">In Progress</button>
             </div>
             <div class="publications-grid">
-                <!-- Patent 1 -->
                 <div class="publication-card animate-on-scroll" data-category="patent">
                     <div class="pub-card-glow"></div>
                     <span class="pub-category patent"><i class="fas fa-lightbulb"></i> Patent</span>
@@ -497,55 +485,50 @@
                         <span class="pub-journal"><i class="fas fa-landmark"></i> Indian Patent Office</span>
                     </div>
                 </div>
-                <!-- Patent 2 -->
                 <div class="publication-card animate-on-scroll" data-category="patent">
                     <div class="pub-card-glow"></div>
                     <span class="pub-category patent"><i class="fas fa-lightbulb"></i> Patent</span>
-                    <h3>Identification of Impurity by Ultra Convergence Chromatography for Greener Analytical Method</h3>
+                    <h3>Impurity Identification via Ultra Convergence Chromatography for Greener Methods</h3>
                     <span class="pub-year"><i class="fas fa-calendar-alt"></i> Patent No. 201611040797 A</span>
-                    <p>Patented methodology for impurity identification obtained in shelf-life studies using Ultra Convergence Chromatography, advancing greener analytical practices.</p>
+                    <p>Patented methodology for impurity identification in shelf-life studies using Ultra Convergence Chromatography, advancing greener analytical practices.</p>
                     <div class="pub-footer">
                         <span class="pub-journal"><i class="fas fa-landmark"></i> Indian Patent Office</span>
                     </div>
                 </div>
-                <!-- Publication 1 -->
                 <div class="publication-card animate-on-scroll" data-category="publication">
                     <div class="pub-card-glow"></div>
                     <span class="pub-category publication"><i class="fas fa-file-lines"></i> Publication</span>
-                    <h3>Dynamic and Rapid Isocratic Greener Analytical Method for Estimation of Chlorocresol with Azole Compounds</h3>
+                    <h3>Rapid Isocratic Greener Method for Chlorocresol Estimation with Azole Compounds</h3>
                     <span class="pub-year"><i class="fas fa-calendar-alt"></i> 2017 &bull; Vol. 30, No. 1, pp. 201–206</span>
                     <p>Published greener analytical methodology for estimation of Chlorocresol along with Azole Compounds in Ointments using rapid isocratic techniques.</p>
                     <div class="pub-footer">
                         <span class="pub-journal"><i class="fas fa-book"></i> Asian Journal of Chemistry</span>
                     </div>
                 </div>
-                <!-- Publication 2 -->
                 <div class="publication-card animate-on-scroll" data-category="publication">
                     <div class="pub-card-glow"></div>
                     <span class="pub-category publication"><i class="fas fa-file-lines"></i> Publication</span>
-                    <h3>Improved Analytical Method for Estimation of Essential Oil via Rapid Static Chromatography Headspace</h3>
+                    <h3>Essential Oil Estimation via Rapid Static Chromatography Headspace</h3>
                     <span class="pub-year"><i class="fas fa-calendar-alt"></i> 2018 &bull; Vol. 11, Issue 5, pp. 1–5</span>
                     <p>Enhanced quality control analysis method for essential oil estimation in drug ointments through Rapid Static Chromatography Headspace technology.</p>
                     <div class="pub-footer">
                         <span class="pub-journal"><i class="fas fa-book"></i> Asian J Pharm Clin Res</span>
                     </div>
                 </div>
-                <!-- Publication 3 -->
                 <div class="publication-card animate-on-scroll" data-category="publication">
                     <div class="pub-card-glow"></div>
                     <span class="pub-category publication"><i class="fas fa-file-lines"></i> Publication</span>
-                    <h3>Estimation of Clotrimazole Residue in Swab Samples via Validated UPLC Method</h3>
+                    <h3>Clotrimazole Residue Estimation in Swab Samples via Validated UPLC Method</h3>
                     <span class="pub-year"><i class="fas fa-calendar-alt"></i> 2012 &bull; Vol. 89, pp. 1655–1670</span>
                     <p>Validated UPLC method for quantitative estimation of Clotrimazole residue in swab samples, ensuring cleaning validation compliance in pharmaceutical manufacturing.</p>
                     <div class="pub-footer">
                         <span class="pub-journal"><i class="fas fa-book"></i> J. Indian Chem. Soc.</span>
                     </div>
                 </div>
-                <!-- In Progress -->
                 <div class="publication-card animate-on-scroll" data-category="research">
                     <div class="pub-card-glow"></div>
                     <span class="pub-category research"><i class="fas fa-spinner"></i> In Progress</span>
-                    <h3>RT and PAT Approaches in Pharmaceutical Quality System</h3>
+                    <h3>RT and PAT Approaches in Pharmaceutical Quality Systems</h3>
                     <span class="pub-year"><i class="fas fa-calendar-alt"></i> Under Publication</span>
                     <p>Comprehensive research on Real-Time and Process Analytical Technology approaches for modernizing pharmaceutical quality systems and manufacturing processes.</p>
                     <div class="pub-footer">
@@ -690,7 +673,7 @@
                 </div>
             </div>
 
-            <!-- Trainings Received -->
+            <!-- Professional Trainings -->
             <div class="trainings-strip animate-on-scroll">
                 <h4><i class="fas fa-user-graduate"></i> Professional Trainings</h4>
                 <div class="training-tags">
@@ -731,7 +714,6 @@
                 <h2>Pharmaceutical Perspectives</h2>
             </div>
 
-            <!-- Blog Cards Grid -->
             <div class="blog-grid">
                 <div class="blog-card featured animate-on-scroll" data-category="gmp">
                     <div class="blog-card-accent"></div>
@@ -822,7 +804,7 @@
             <div class="section-header animate-on-scroll">
                 <span class="section-label">Connect</span>
                 <h2>Let's Connect</h2>
-                <p class="section-subtitle">Open to Professional Collaborations, Scientific Discussions & Industry Engagements</p>
+                <p class="section-subtitle">Open to professional collaborations, scientific discussions & industry engagements</p>
             </div>
             <div class="contact-grid">
                 <div class="contact-form-wrapper animate-on-scroll" data-animation="fade-right">

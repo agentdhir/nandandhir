@@ -1,6 +1,6 @@
 /* ============================================
    DR. NANDAN KUMAR DHIR — Premium Portfolio
-   Enhanced Dynamic JavaScript
+   v3.0 — Enhanced Dynamic JavaScript
    ============================================ */
 
 (function () {
@@ -18,6 +18,20 @@
     }
 
     // =============================================
+    // Utility: Throttle (for scroll handlers)
+    // =============================================
+    function throttle(fn, limit) {
+        let inThrottle;
+        return function (...args) {
+            if (!inThrottle) {
+                fn.apply(this, args);
+                inThrottle = true;
+                setTimeout(() => inThrottle = false, limit);
+            }
+        };
+    }
+
+    // =============================================
     // DOM Ready
     // =============================================
     document.addEventListener('DOMContentLoaded', function () {
@@ -27,20 +41,22 @@
         // =============================================
         const loader = document.getElementById('loader');
         if (loader) {
+            // Slightly longer for premium feel
             setTimeout(function () {
                 loader.classList.add('hidden');
                 document.body.classList.add('loaded');
-            }, 2200);
+            }, 2400);
         }
 
         // =============================================
-        // 1. PARTICLE CANVAS ANIMATION (Enhanced)
+        // 1. PARTICLE CANVAS (Optimized)
         // =============================================
         const canvas = document.getElementById('particle-canvas');
         if (canvas) {
             const ctx = canvas.getContext('2d');
             let particles = [];
             let mouse = { x: null, y: null };
+            let animFrameId = null;
 
             function resizeCanvas() {
                 const hero = canvas.parentElement;
@@ -50,19 +66,21 @@
 
             function createParticles() {
                 particles = [];
-                const count = window.innerWidth < 768 ? 25 : 55;
+                const isMobile = window.innerWidth < 768;
+                const count = isMobile ? 20 : 50;
+
                 for (let i = 0; i < count; i++) {
-                    const isTeal = Math.random() > 0.5;
+                    const isTeal = Math.random() > 0.4;
                     particles.push({
                         x: Math.random() * canvas.width,
                         y: Math.random() * canvas.height,
-                        radius: Math.random() * 2.5 + 0.5,
-                        vx: (Math.random() - 0.5) * 0.35,
-                        vy: (Math.random() - 0.5) * 0.35,
-                        opacity: Math.random() * 0.4 + 0.1,
+                        radius: Math.random() * 2.2 + 0.4,
+                        vx: (Math.random() - 0.5) * 0.3,
+                        vy: (Math.random() - 0.5) * 0.3,
+                        opacity: Math.random() * 0.35 + 0.08,
                         color: isTeal ? 'rgba(13, 148, 136,' : 'rgba(255, 255, 255,',
                         pulse: Math.random() * Math.PI * 2,
-                        pulseSpeed: 0.01 + Math.random() * 0.02
+                        pulseSpeed: 0.008 + Math.random() * 0.015
                     });
                 }
             }
@@ -70,70 +88,87 @@
             function drawParticles() {
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-                particles.forEach(function (p, i) {
-                    // Pulsing opacity
-                    p.pulse += p.pulseSpeed;
-                    const dynamicOpacity = p.opacity + Math.sin(p.pulse) * 0.1;
+                const connectionDist = window.innerWidth < 768 ? 100 : 120;
 
-                    // Mouse interaction (subtle push)
+                particles.forEach(function (p, i) {
+                    p.pulse += p.pulseSpeed;
+                    const dynamicOpacity = p.opacity + Math.sin(p.pulse) * 0.08;
+
+                    // Mouse interaction
                     if (mouse.x && mouse.y) {
                         const dx = p.x - mouse.x;
                         const dy = p.y - mouse.y;
                         const dist = Math.sqrt(dx * dx + dy * dy);
-                        if (dist < 120) {
-                            const force = (120 - dist) / 120 * 0.3;
+                        if (dist < 110) {
+                            const force = (110 - dist) / 110 * 0.25;
                             p.x += (dx / dist) * force;
                             p.y += (dy / dist) * force;
                         }
                     }
 
-                    // Move
                     p.x += p.vx;
                     p.y += p.vy;
 
-                    // Wrap around
+                    // Wrap
                     if (p.x < -10) p.x = canvas.width + 10;
                     if (p.x > canvas.width + 10) p.x = -10;
                     if (p.y < -10) p.y = canvas.height + 10;
                     if (p.y > canvas.height + 10) p.y = -10;
 
-                    // Draw particle with glow
+                    // Draw particle
                     ctx.beginPath();
                     ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
                     ctx.fillStyle = p.color + Math.max(0, dynamicOpacity) + ')';
                     ctx.fill();
 
                     // Glow for larger particles
-                    if (p.radius > 1.5) {
+                    if (p.radius > 1.4) {
                         ctx.beginPath();
                         ctx.arc(p.x, p.y, p.radius * 3, 0, Math.PI * 2);
-                        ctx.fillStyle = p.color + (dynamicOpacity * 0.08) + ')';
+                        ctx.fillStyle = p.color + (dynamicOpacity * 0.06) + ')';
                         ctx.fill();
                     }
 
-                    // Connect nearby particles
+                    // Connections
                     for (let j = i + 1; j < particles.length; j++) {
                         const p2 = particles[j];
                         const dx2 = p.x - p2.x;
                         const dy2 = p.y - p2.y;
                         const dist2 = Math.sqrt(dx2 * dx2 + dy2 * dy2);
 
-                        if (dist2 < 130) {
-                            const lineOpacity = 0.06 * (1 - dist2 / 130);
+                        if (dist2 < connectionDist) {
+                            const lineOpacity = 0.05 * (1 - dist2 / connectionDist);
                             ctx.beginPath();
                             ctx.moveTo(p.x, p.y);
                             ctx.lineTo(p2.x, p2.y);
                             ctx.strokeStyle = 'rgba(13, 148, 136,' + lineOpacity + ')';
-                            ctx.lineWidth = 0.6;
+                            ctx.lineWidth = 0.5;
                             ctx.stroke();
                         }
                     }
                 });
 
-                requestAnimationFrame(drawParticles);
+                animFrameId = requestAnimationFrame(drawParticles);
             }
 
-            // Mouse tracking for hero
+            // Pause animation when hero not visible
+            const heroSection = document.getElementById('hero');
+            if (heroSection && 'IntersectionObserver' in window) {
+                const heroObserver = new IntersectionObserver(function (entries) {
+                    entries.forEach(function (entry) {
+                        if (entry.isIntersecting) {
+                            if (!animFrameId) drawParticles();
+                        } else {
+                            if (animFrameId) {
+                                cancelAnimationFrame(animFrameId);
+                                animFrameId = null;
+                            }
+                        }
+                    });
+                }, { threshold: 0.05 });
+                heroObserver.observe(heroSection);
+            }
+
             canvas.addEventListener('mousemove', function (e) {
                 const rect = canvas.getBoundingClientRect();
                 mouse.x = e.clientX - rect.left;
@@ -151,7 +186,7 @@
             window.addEventListener('resize', debounce(function () {
                 resizeCanvas();
                 createParticles();
-            }, 250));
+            }, 300));
         }
 
         // =============================================
@@ -178,13 +213,13 @@
 
             // Navbar background
             if (navbar) {
-                navbar.classList.toggle('scrolled', scrollY > 80);
+                navbar.classList.toggle('scrolled', scrollY > 60);
             }
 
             // Active nav link
             let current = '';
             sections.forEach(function (section) {
-                const sectionTop = section.offsetTop - 150;
+                const sectionTop = section.offsetTop - 140;
                 if (scrollY >= sectionTop) {
                     current = section.getAttribute('id');
                 }
@@ -203,11 +238,10 @@
                 backToTop.classList.toggle('visible', scrollY > 500);
             }
 
-            // Update scroll progress
             updateScrollProgress();
         }
 
-        window.addEventListener('scroll', handleScroll, { passive: true });
+        window.addEventListener('scroll', throttle(handleScroll, 16), { passive: true });
         handleScroll();
 
         // =============================================
@@ -221,7 +255,8 @@
                 const target = document.querySelector(targetId);
                 if (target) {
                     e.preventDefault();
-                    const targetPosition = target.getBoundingClientRect().top + window.scrollY - 80;
+                    const navHeight = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--navbar-height')) || 76;
+                    const targetPosition = target.getBoundingClientRect().top + window.scrollY - navHeight;
                     window.scrollTo({ top: targetPosition, behavior: 'smooth' });
 
                     // Close mobile nav
@@ -249,8 +284,18 @@
                 document.body.style.overflow = mobileNav.classList.contains('active') ? 'hidden' : '';
             });
 
+            // Close on overlay click
             mobileNav.addEventListener('click', function (e) {
                 if (e.target === mobileNav) {
+                    mobileToggle.classList.remove('active');
+                    mobileNav.classList.remove('active');
+                    document.body.style.overflow = '';
+                }
+            });
+
+            // Close on Escape
+            document.addEventListener('keydown', function (e) {
+                if (e.key === 'Escape' && mobileNav.classList.contains('active')) {
                     mobileToggle.classList.remove('active');
                     mobileNav.classList.remove('active');
                     document.body.style.overflow = '';
@@ -271,7 +316,10 @@
                         observer.unobserve(entry.target);
                     }
                 });
-            }, { threshold: 0.1, rootMargin: '0px 0px -30px 0px' });
+            }, {
+                threshold: 0.08,
+                rootMargin: '0px 0px -40px 0px'
+            });
 
             animatedElements.forEach(function (el) { observer.observe(el); });
         } else {
@@ -289,15 +337,17 @@
             counters.forEach(function (counter) {
                 const target = parseInt(counter.getAttribute('data-target'), 10);
                 if (isNaN(target)) return;
-                const duration = 2000;
+                const duration = 2200;
                 const start = performance.now();
 
-                function easeOutQuad(t) { return t * (2 - t); }
+                function easeOutQuart(t) {
+                    return 1 - Math.pow(1 - t, 4);
+                }
 
                 function update(now) {
                     const elapsed = now - start;
                     const progress = Math.min(elapsed / duration, 1);
-                    counter.textContent = Math.floor(easeOutQuad(progress) * target);
+                    counter.textContent = Math.floor(easeOutQuart(progress) * target);
                     if (progress < 1) {
                         requestAnimationFrame(update);
                     } else {
@@ -318,7 +368,7 @@
                         counterObserver.unobserve(entry.target);
                     }
                 });
-            }, { threshold: 0.3 });
+            }, { threshold: 0.25 });
             counterObserver.observe(counterGrid);
         }
 
@@ -334,17 +384,22 @@
                 this.classList.add('active');
                 const filter = this.getAttribute('data-filter');
 
-                publicationCards.forEach(function (card) {
+                publicationCards.forEach(function (card, index) {
                     if (filter === 'all' || card.getAttribute('data-category') === filter) {
                         card.classList.remove('hidden');
                         card.style.opacity = '0';
-                        card.style.transform = 'translateY(10px)';
+                        card.style.transform = 'translateY(12px)';
                         setTimeout(function () {
+                            card.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
                             card.style.opacity = '1';
                             card.style.transform = 'translateY(0)';
-                        }, 50);
+                        }, 40 + index * 60);
                     } else {
-                        card.classList.add('hidden');
+                        card.style.opacity = '0';
+                        card.style.transform = 'translateY(8px)';
+                        setTimeout(function () {
+                            card.classList.add('hidden');
+                        }, 250);
                     }
                 });
             });
@@ -370,7 +425,7 @@
             if (localStorage.getItem('cookiesAccepted') === 'true') {
                 cookieBanner.classList.add('hidden');
             } else {
-                setTimeout(function () { cookieBanner.classList.remove('hidden'); }, 3000);
+                setTimeout(function () { cookieBanner.classList.remove('hidden'); }, 3500);
             }
         }
         if (cookieAccept) {
@@ -410,10 +465,16 @@
                     const original = btn.innerHTML;
                     btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
                     btn.disabled = true;
+                    btn.style.opacity = '0.7';
                     setTimeout(function () {
                         btn.innerHTML = '<i class="fas fa-check"></i> Sent!';
+                        btn.style.opacity = '1';
                         showNotification('Message sent successfully! Dr. Dhir will get back to you soon.');
-                        setTimeout(function () { btn.innerHTML = original; btn.disabled = false; contactForm.reset(); }, 2500);
+                        setTimeout(function () {
+                            btn.innerHTML = original;
+                            btn.disabled = false;
+                            contactForm.reset();
+                        }, 2500);
                     }, 1500);
                 }
             });
@@ -457,24 +518,24 @@
                 if (isDeleting) {
                     typingElement.textContent = currentPhrase.substring(0, charIndex - 1);
                     charIndex--;
-                    typeSpeed = 35;
+                    typeSpeed = 30;
                 } else {
                     typingElement.textContent = currentPhrase.substring(0, charIndex + 1);
                     charIndex++;
-                    typeSpeed = 75;
+                    typeSpeed = 70;
                 }
 
                 if (!isDeleting && charIndex === currentPhrase.length) {
-                    typeSpeed = 2200;
+                    typeSpeed = 2400;
                     isDeleting = true;
                 } else if (isDeleting && charIndex === 0) {
                     isDeleting = false;
                     phraseIndex = (phraseIndex + 1) % phrases.length;
-                    typeSpeed = 400;
+                    typeSpeed = 500;
                 }
                 setTimeout(typeEffect, typeSpeed);
             }
-            setTimeout(typeEffect, 2500);
+            setTimeout(typeEffect, 2800);
         }
 
         // =============================================
@@ -490,26 +551,27 @@
             });
 
             function animateFollower() {
-                followerX += (mouseX - followerX) * 0.15;
-                followerY += (mouseY - followerY) * 0.15;
+                followerX += (mouseX - followerX) * 0.12;
+                followerY += (mouseY - followerY) * 0.12;
                 follower.style.left = followerX + 'px';
                 follower.style.top = followerY + 'px';
                 requestAnimationFrame(animateFollower);
             }
             animateFollower();
 
-            // Enlarge on interactive elements
-            const interactives = document.querySelectorAll('a, button, .expertise-card, .publication-card, .blog-card, .achievement-card');
+            const interactives = document.querySelectorAll('a, button, .expertise-card, .publication-card, .blog-card, .achievement-card, .contact-card, .approval-card, .edu-card');
             interactives.forEach(function (el) {
                 el.addEventListener('mouseenter', function () {
                     follower.style.width = '40px';
                     follower.style.height = '40px';
-                    follower.style.borderColor = 'rgba(13, 148, 136, 0.6)';
+                    follower.style.borderColor = 'rgba(13, 148, 136, 0.5)';
+                    follower.style.borderWidth = '1px';
                 });
                 el.addEventListener('mouseleave', function () {
                     follower.style.width = '20px';
                     follower.style.height = '20px';
-                    follower.style.borderColor = 'rgba(13, 148, 136, 0.4)';
+                    follower.style.borderColor = 'rgba(13, 148, 136, 0.35)';
+                    follower.style.borderWidth = '1.5px';
                 });
             });
         }
@@ -526,12 +588,14 @@
                     const y = e.clientY - rect.top;
                     const centerX = rect.width / 2;
                     const centerY = rect.height / 2;
-                    const rotateX = (y - centerY) / centerY * -4;
-                    const rotateY = (x - centerX) / centerX * 4;
-                    card.style.transform = 'perspective(800px) rotateX(' + rotateX + 'deg) rotateY(' + rotateY + 'deg) translateY(-6px)';
+                    const rotateX = (y - centerY) / centerY * -3;
+                    const rotateY = (x - centerX) / centerX * 3;
+                    card.style.transform = 'perspective(900px) rotateX(' + rotateX + 'deg) rotateY(' + rotateY + 'deg) translateY(-5px)';
                 });
                 card.addEventListener('mouseleave', function () {
                     card.style.transform = '';
+                    card.style.transition = 'transform 0.4s ease';
+                    setTimeout(() => card.style.transition = '', 400);
                 });
             });
         }
@@ -541,30 +605,43 @@
         // =============================================
         const heroDecos = document.querySelectorAll('.hero-deco');
         if (heroDecos.length > 0 && window.innerWidth >= 768) {
-            window.addEventListener('scroll', function () {
+            window.addEventListener('scroll', throttle(function () {
                 const scrollY = window.scrollY;
+                if (scrollY > window.innerHeight) return; // Skip when hero out of view
                 heroDecos.forEach(function (deco, i) {
-                    const speed = 0.15 + (i * 0.05);
+                    const speed = 0.12 + (i * 0.04);
                     deco.style.transform = 'translateY(' + (scrollY * speed) + 'px)';
                 });
-            }, { passive: true });
+            }, 16), { passive: true });
         }
 
         // =============================================
-        // 17. SECTION REVEAL COUNTER
+        // 17. COUNTER GRADIENT ANIMATION
         // =============================================
-        // Make counter section have a nice dark bg animation
         if (counterGrid) {
             const counterObserver2 = new IntersectionObserver(function (entries) {
                 entries.forEach(function (entry) {
                     if (entry.isIntersecting) {
                         entry.target.style.backgroundSize = '200% 200%';
-                        entry.target.style.animation = 'gradientShift 4s ease infinite';
+                        entry.target.style.animation = 'gradientShift 5s ease infinite';
                     }
                 });
-            }, { threshold: 0.3 });
+            }, { threshold: 0.25 });
             counterObserver2.observe(counterGrid);
         }
+
+        // =============================================
+        // 18. FOCUS MANAGEMENT FOR ACCESSIBILITY
+        // =============================================
+        // Add focus-visible outlines for keyboard users
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Tab') {
+                document.body.classList.add('keyboard-nav');
+            }
+        });
+        document.addEventListener('mousedown', function () {
+            document.body.classList.remove('keyboard-nav');
+        });
 
     }); // End DOMContentLoaded
 })(); // End IIFE
