@@ -1,104 +1,73 @@
-/* ============================================
-   DR. NANDAN KUMAR DHIR — ULTRA PREMIUM PORTFOLIO
-   v4.0 — Creative Dynamic JavaScript
-   ============================================ */
+/* ==============================================
+   VERIDION LIFE SCIENCES
+   Premium Refined — Script (Final Polish)
+   ============================================== */
 
 (function () {
     'use strict';
 
-    function debounce(fn, delay) {
-        let timer;
-        return function (...args) {
-            clearTimeout(timer);
-            timer = setTimeout(() => fn.apply(this, args), delay);
-        };
-    }
-
-    function throttle(fn, limit) {
-        let inThrottle;
-        return function (...args) {
-            if (!inThrottle) {
-                fn.apply(this, args);
-                inThrottle = true;
-                setTimeout(() => inThrottle = false, limit);
-            }
-        };
-    }
-
     document.addEventListener('DOMContentLoaded', function () {
 
-        // =============================================
-        // 0. LOADER
-        // =============================================
-        const loader = document.getElementById('loader');
+        // ===== LOADER =====
+        var loader = document.getElementById('loader');
         if (loader) {
             setTimeout(function () {
                 loader.classList.add('hidden');
-                document.body.classList.add('loaded');
-            }, 2500);
+                // Trigger hero animations after loader fades
+                setTimeout(function () {
+                    document.querySelectorAll('.hero-container .anim').forEach(function (el, i) {
+                        setTimeout(function () { el.classList.add('visible'); }, i * 120);
+                    });
+                }, 200);
+            }, 2400);
         }
 
-        // =============================================
-        // 1. PARTICLE CANVAS — Multi-color Aurora
-        // =============================================
-        const canvas = document.getElementById('particle-canvas');
+        // ===== PARTICLES =====
+        var canvas = document.getElementById('particle-canvas');
         if (canvas) {
-            const ctx = canvas.getContext('2d');
-            let particles = [];
-            let mouse = { x: null, y: null };
-            let animFrameId = null;
-
-            // Color palette for particles
-            const particleColors = [
-                'rgba(14, 165, 233,',   // Blue
-                'rgba(20, 184, 166,',   // Teal
-                'rgba(139, 92, 246,',   // Purple
-                'rgba(245, 158, 11,',   // Gold
-                'rgba(255, 255, 255,',  // White
-            ];
+            var ctx = canvas.getContext('2d');
+            var particles = [];
+            var mouse = { x: null, y: null };
+            var animId = null;
 
             function resizeCanvas() {
-                const hero = canvas.parentElement;
+                var hero = canvas.parentElement;
                 canvas.width = hero.offsetWidth;
                 canvas.height = hero.offsetHeight;
             }
 
             function createParticles() {
                 particles = [];
-                const isMobile = window.innerWidth < 768;
-                const count = isMobile ? 22 : 55;
-
-                for (let i = 0; i < count; i++) {
-                    const colorIndex = Math.random() < 0.4 ? 0 : Math.random() < 0.6 ? 1 : Math.random() < 0.8 ? 4 : Math.random() < 0.9 ? 2 : 3;
+                var count = window.innerWidth < 768 ? 22 : 55;
+                for (var i = 0; i < count; i++) {
                     particles.push({
                         x: Math.random() * canvas.width,
                         y: Math.random() * canvas.height,
-                        radius: Math.random() * 2.5 + 0.3,
-                        vx: (Math.random() - 0.5) * 0.28,
-                        vy: (Math.random() - 0.5) * 0.28,
-                        opacity: Math.random() * 0.35 + 0.08,
-                        color: particleColors[colorIndex],
+                        r: Math.random() * 1.8 + 0.3,
+                        vx: (Math.random() - 0.5) * 0.18,
+                        vy: (Math.random() - 0.5) * 0.18,
+                        opacity: Math.random() * 0.25 + 0.03,
                         pulse: Math.random() * Math.PI * 2,
-                        pulseSpeed: 0.006 + Math.random() * 0.012
+                        ps: 0.003 + Math.random() * 0.006
                     });
                 }
             }
 
             function drawParticles() {
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
-                const connectionDist = window.innerWidth < 768 ? 90 : 115;
+                var connectDist = window.innerWidth < 768 ? 90 : 120;
 
-                particles.forEach(function (p, i) {
-                    p.pulse += p.pulseSpeed;
-                    const dynamicOpacity = p.opacity + Math.sin(p.pulse) * 0.1;
+                for (var i = 0; i < particles.length; i++) {
+                    var p = particles[i];
+                    p.pulse += p.ps;
+                    var op = p.opacity + Math.sin(p.pulse) * 0.07;
 
-                    // Mouse push
-                    if (mouse.x && mouse.y) {
-                        const dx = p.x - mouse.x;
-                        const dy = p.y - mouse.y;
-                        const dist = Math.sqrt(dx * dx + dy * dy);
-                        if (dist < 120) {
-                            const force = (120 - dist) / 120 * 0.3;
+                    if (mouse.x !== null) {
+                        var dx = p.x - mouse.x;
+                        var dy = p.y - mouse.y;
+                        var dist = Math.sqrt(dx * dx + dy * dy);
+                        if (dist < 150) {
+                            var force = (150 - dist) / 150 * 0.3;
                             p.x += (dx / dist) * force;
                             p.y += (dy / dist) * force;
                         }
@@ -111,54 +80,38 @@
                     if (p.y < -10) p.y = canvas.height + 10;
                     if (p.y > canvas.height + 10) p.y = -10;
 
-                    // Draw
                     ctx.beginPath();
-                    ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-                    ctx.fillStyle = p.color + Math.max(0, dynamicOpacity) + ')';
+                    ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+                    ctx.fillStyle = 'rgba(20,184,166,' + Math.max(0, op) + ')';
                     ctx.fill();
 
-                    // Glow
-                    if (p.radius > 1.3) {
-                        ctx.beginPath();
-                        ctx.arc(p.x, p.y, p.radius * 3.5, 0, Math.PI * 2);
-                        ctx.fillStyle = p.color + (dynamicOpacity * 0.05) + ')';
-                        ctx.fill();
-                    }
-
-                    // Connections with gradient
-                    for (let j = i + 1; j < particles.length; j++) {
-                        const p2 = particles[j];
-                        const dx2 = p.x - p2.x;
-                        const dy2 = p.y - p2.y;
-                        const dist2 = Math.sqrt(dx2 * dx2 + dy2 * dy2);
-
-                        if (dist2 < connectionDist) {
-                            const lineOpacity = 0.04 * (1 - dist2 / connectionDist);
-                            const gradient = ctx.createLinearGradient(p.x, p.y, p2.x, p2.y);
-                            gradient.addColorStop(0, p.color + lineOpacity + ')');
-                            gradient.addColorStop(1, p2.color + lineOpacity + ')');
+                    for (var j = i + 1; j < particles.length; j++) {
+                        var p2 = particles[j];
+                        var dx2 = p.x - p2.x;
+                        var dy2 = p.y - p2.y;
+                        var dist2 = Math.sqrt(dx2 * dx2 + dy2 * dy2);
+                        if (dist2 < connectDist) {
+                            var lineOp = 0.04 * (1 - dist2 / connectDist);
                             ctx.beginPath();
                             ctx.moveTo(p.x, p.y);
                             ctx.lineTo(p2.x, p2.y);
-                            ctx.strokeStyle = gradient;
-                            ctx.lineWidth = 0.5;
+                            ctx.strokeStyle = 'rgba(20,184,166,' + lineOp + ')';
+                            ctx.lineWidth = 0.6;
                             ctx.stroke();
                         }
                     }
-                });
-
-                animFrameId = requestAnimationFrame(drawParticles);
+                }
+                animId = requestAnimationFrame(drawParticles);
             }
 
-            // Pause when hero not visible
-            const heroSection = document.getElementById('hero');
+            var heroSection = document.getElementById('hero');
             if (heroSection && 'IntersectionObserver' in window) {
-                const heroObs = new IntersectionObserver(function (entries) {
+                var heroObs = new IntersectionObserver(function (entries) {
                     entries.forEach(function (entry) {
                         if (entry.isIntersecting) {
-                            if (!animFrameId) drawParticles();
+                            if (!animId) drawParticles();
                         } else {
-                            if (animFrameId) { cancelAnimationFrame(animFrameId); animFrameId = null; }
+                            if (animId) { cancelAnimationFrame(animId); animId = null; }
                         }
                     });
                 }, { threshold: 0.05 });
@@ -166,214 +119,247 @@
             }
 
             canvas.addEventListener('mousemove', function (e) {
-                const rect = canvas.getBoundingClientRect();
+                var rect = canvas.getBoundingClientRect();
                 mouse.x = e.clientX - rect.left;
                 mouse.y = e.clientY - rect.top;
             });
-            canvas.addEventListener('mouseleave', function () { mouse.x = null; mouse.y = null; });
+            canvas.addEventListener('mouseleave', function () {
+                mouse.x = null; mouse.y = null;
+            });
 
             resizeCanvas();
             createParticles();
             drawParticles();
-            window.addEventListener('resize', debounce(function () { resizeCanvas(); createParticles(); }, 300));
-        }
 
-        // =============================================
-        // 2. SCROLL PROGRESS
-        // =============================================
-        const scrollProgress = document.getElementById('scroll-progress');
-        function updateScrollProgress() {
-            if (!scrollProgress) return;
-            const scrollTop = window.scrollY;
-            const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-            scrollProgress.style.width = (docHeight > 0 ? (scrollTop / docHeight) * 100 : 0) + '%';
-        }
-
-        // =============================================
-        // 3. NAVBAR + ACTIVE LINK
-        // =============================================
-        const navbar = document.querySelector('.navbar');
-        const navLinks = document.querySelectorAll('.nav-link');
-        const sections = document.querySelectorAll('section[id]');
-
-        function handleScroll() {
-            const scrollY = window.scrollY;
-            if (navbar) navbar.classList.toggle('scrolled', scrollY > 60);
-
-            let current = '';
-            sections.forEach(function (section) {
-                if (scrollY >= section.offsetTop - 140) current = section.getAttribute('id');
+            var resizeTimer;
+            window.addEventListener('resize', function () {
+                clearTimeout(resizeTimer);
+                resizeTimer = setTimeout(function () {
+                    resizeCanvas();
+                    createParticles();
+                }, 300);
             });
-            navLinks.forEach(function (link) {
+        }
+
+        // ===== NAVBAR SCROLL =====
+        var navbar = document.getElementById('navbar');
+        var navLinksAll = document.querySelectorAll('.nav-links a:not(.nav-cta-btn)');
+        var sections = document.querySelectorAll('section[id]');
+        var backTopBtn = document.getElementById('back-to-top');
+        var mobileSticky = document.getElementById('mobile-sticky-cta');
+        var lastScroll = 0;
+        var ticking = false;
+
+        function onScroll() {
+            var scrollY = window.scrollY;
+
+            // Navbar background
+            if (navbar) {
+                navbar.classList.toggle('scrolled', scrollY > 60);
+            }
+
+            // Active nav link
+            var current = '';
+            sections.forEach(function (sec) {
+                if (scrollY >= sec.offsetTop - 160) {
+                    current = sec.getAttribute('id');
+                }
+            });
+            navLinksAll.forEach(function (link) {
                 link.classList.remove('active');
-                if (link.getAttribute('href') === '#' + current) link.classList.add('active');
+                if (link.getAttribute('href') === '#' + current) {
+                    link.classList.add('active');
+                }
             });
 
-            const backToTop = document.querySelector('.back-to-top');
-            if (backToTop) backToTop.classList.toggle('visible', scrollY > 500);
-            updateScrollProgress();
+            // Back to top
+            if (backTopBtn) {
+                backTopBtn.classList.toggle('visible', scrollY > 500);
+            }
+
+            // Mobile sticky CTA
+            if (mobileSticky && window.innerWidth < 769) {
+                var hero = document.getElementById('hero');
+                if (hero) {
+                    mobileSticky.classList.toggle('visible', scrollY > hero.offsetHeight * 0.5);
+                }
+            }
+
+            lastScroll = scrollY;
+            ticking = false;
         }
 
-        window.addEventListener('scroll', throttle(handleScroll, 16), { passive: true });
-        handleScroll();
+        window.addEventListener('scroll', function () {
+            if (!ticking) {
+                requestAnimationFrame(onScroll);
+                ticking = true;
+            }
+        }, { passive: true });
+        onScroll();
 
-        // =============================================
-        // 4. SMOOTH SCROLLING
-        // =============================================
+        // ===== SMOOTH SCROLL =====
         document.querySelectorAll('a[href^="#"]').forEach(function (anchor) {
             anchor.addEventListener('click', function (e) {
-                const targetId = this.getAttribute('href');
+                var targetId = this.getAttribute('href');
                 if (targetId === '#') return;
-                const target = document.querySelector(targetId);
+                var target = document.querySelector(targetId);
                 if (target) {
                     e.preventDefault();
-                    const navHeight = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--navbar-height')) || 76;
-                    window.scrollTo({ top: target.getBoundingClientRect().top + window.scrollY - navHeight, behavior: 'smooth' });
-
-                    const mobileNav = document.querySelector('.mobile-nav');
-                    const mobileToggle = document.querySelector('.mobile-toggle');
-                    if (mobileNav && mobileNav.classList.contains('active')) {
-                        mobileNav.classList.remove('active');
-                        if (mobileToggle) mobileToggle.classList.remove('active');
-                        document.body.style.overflow = '';
-                    }
+                    var navH = 72;
+                    window.scrollTo({
+                        top: target.getBoundingClientRect().top + window.scrollY - navH,
+                        behavior: 'smooth'
+                    });
+                    // Close mobile nav
+                    closeMobileNav();
                 }
             });
         });
 
-        // =============================================
-        // 5. MOBILE NAV
-        // =============================================
-        const mobileToggle = document.querySelector('.mobile-toggle');
-        const mobileNav = document.querySelector('.mobile-nav');
+        // ===== MOBILE NAV =====
+        var hamburger = document.getElementById('hamburger');
+        var mobileNav = document.getElementById('mobile-nav');
 
-        if (mobileToggle && mobileNav) {
-            mobileToggle.addEventListener('click', function () {
+        function closeMobileNav() {
+            if (mobileNav && mobileNav.classList.contains('active')) {
+                mobileNav.classList.remove('active');
+                if (hamburger) hamburger.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        }
+
+        if (hamburger && mobileNav) {
+            hamburger.addEventListener('click', function () {
                 this.classList.toggle('active');
                 mobileNav.classList.toggle('active');
                 document.body.style.overflow = mobileNav.classList.contains('active') ? 'hidden' : '';
             });
-            mobileNav.addEventListener('click', function (e) {
-                if (e.target === mobileNav) {
-                    mobileToggle.classList.remove('active');
-                    mobileNav.classList.remove('active');
-                    document.body.style.overflow = '';
-                }
-            });
-            document.addEventListener('keydown', function (e) {
-                if (e.key === 'Escape' && mobileNav.classList.contains('active')) {
-                    mobileToggle.classList.remove('active');
-                    mobileNav.classList.remove('active');
-                    document.body.style.overflow = '';
-                }
-            });
         }
 
-        // =============================================
-        // 6. SCROLL ANIMATIONS
-        // =============================================
-        const animatedElements = document.querySelectorAll('.animate-on-scroll');
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape') closeMobileNav();
+        });
 
-        if (animatedElements.length > 0 && 'IntersectionObserver' in window) {
-            const observer = new IntersectionObserver(function (entries) {
+        // ===== SCROLL REVEAL =====
+        var animElements = document.querySelectorAll('.anim:not(.hero-container .anim)');
+
+        if (animElements.length > 0 && 'IntersectionObserver' in window) {
+            var revealObs = new IntersectionObserver(function (entries) {
                 entries.forEach(function (entry) {
                     if (entry.isIntersecting) {
-                        entry.target.classList.add('animated');
-                        observer.unobserve(entry.target);
+                        entry.target.classList.add('visible');
+                        revealObs.unobserve(entry.target);
                     }
                 });
-            }, { threshold: 0.08, rootMargin: '0px 0px -30px 0px' });
-            animatedElements.forEach(function (el) { observer.observe(el); });
+            }, { threshold: 0.06, rootMargin: '0px 0px -50px 0px' });
+
+            animElements.forEach(function (el) {
+                revealObs.observe(el);
+            });
         } else {
-            animatedElements.forEach(function (el) { el.classList.add('animated'); });
+            animElements.forEach(function (el) {
+                el.classList.add('visible');
+            });
         }
 
-        // =============================================
-        // 7. COUNTERS
-        // =============================================
-        const counters = document.querySelectorAll('.counter');
-        let countersAnimated = false;
+        // Also handle hero elements if no loader
+        if (!loader) {
+            document.querySelectorAll('.hero-container .anim').forEach(function (el) {
+                el.classList.add('visible');
+            });
+        }
+
+        // ===== COUNTERS =====
+        var counters = document.querySelectorAll('.counter');
+        var countersAnimated = false;
 
         function animateCounters() {
             if (countersAnimated) return;
+            countersAnimated = true;
+
             counters.forEach(function (counter) {
-                const target = parseInt(counter.getAttribute('data-target'), 10);
+                var target = parseInt(counter.getAttribute('data-target'), 10);
                 if (isNaN(target)) return;
-                const duration = 2200;
-                const start = performance.now();
-                function easeOutQuart(t) { return 1 - Math.pow(1 - t, 4); }
+
+                var duration = 2200;
+                var start = performance.now();
+
                 function update(now) {
-                    const progress = Math.min((now - start) / duration, 1);
-                    counter.textContent = Math.floor(easeOutQuart(progress) * target);
-                    if (progress < 1) requestAnimationFrame(update);
-                    else counter.textContent = target;
+                    var elapsed = now - start;
+                    var progress = Math.min(elapsed / duration, 1);
+                    // Smoother easing
+                    var eased = 1 - Math.pow(1 - progress, 4);
+                    counter.textContent = Math.floor(eased * target);
+                    if (progress < 1) {
+                        requestAnimationFrame(update);
+                    } else {
+                        counter.textContent = target;
+                    }
                 }
                 requestAnimationFrame(update);
             });
-            countersAnimated = true;
         }
 
-        const counterGrid = document.querySelector('.counter-grid');
-        if (counterGrid && 'IntersectionObserver' in window) {
-            const cObs = new IntersectionObserver(function (entries) {
+        var statsBar = document.querySelector('.stats-bar');
+        if (statsBar && 'IntersectionObserver' in window) {
+            var counterObs = new IntersectionObserver(function (entries) {
                 entries.forEach(function (entry) {
-                    if (entry.isIntersecting) { animateCounters(); cObs.unobserve(entry.target); }
+                    if (entry.isIntersecting) {
+                        animateCounters();
+                        counterObs.unobserve(entry.target);
+                    }
                 });
-            }, { threshold: 0.25 });
-            cObs.observe(counterGrid);
+            }, { threshold: 0.3 });
+            counterObs.observe(statsBar);
         }
 
-        // =============================================
-        // 8. PUBLICATION FILTERS
-        // =============================================
-        const filterBtns = document.querySelectorAll('.filter-btn');
-        const publicationCards = document.querySelectorAll('.publication-card');
+        // ===== PUBLICATION FILTERS =====
+        var filterBtns = document.querySelectorAll('.filter-btn');
+        var pubCards = document.querySelectorAll('.pub-card');
 
         filterBtns.forEach(function (btn) {
             btn.addEventListener('click', function () {
                 filterBtns.forEach(function (b) { b.classList.remove('active'); });
                 this.classList.add('active');
-                const filter = this.getAttribute('data-filter');
+                var filter = this.getAttribute('data-filter');
 
-                publicationCards.forEach(function (card, index) {
+                pubCards.forEach(function (card, index) {
                     if (filter === 'all' || card.getAttribute('data-category') === filter) {
                         card.classList.remove('hidden');
                         card.style.opacity = '0';
-                        card.style.transform = 'translateY(15px) scale(0.97)';
+                        card.style.transform = 'translateY(12px)';
                         setTimeout(function () {
-                            card.style.transition = 'opacity 0.5s cubic-bezier(0.19, 1, 0.22, 1), transform 0.5s cubic-bezier(0.19, 1, 0.22, 1)';
+                            card.style.transition = 'opacity 0.45s ease, transform 0.45s ease';
                             card.style.opacity = '1';
-                            card.style.transform = 'translateY(0) scale(1)';
+                            card.style.transform = 'translateY(0)';
                         }, 40 + index * 70);
                     } else {
                         card.style.opacity = '0';
-                        card.style.transform = 'scale(0.95)';
-                        setTimeout(function () { card.classList.add('hidden'); }, 300);
+                        card.style.transform = 'scale(0.97)';
+                        setTimeout(function () { card.classList.add('hidden'); }, 350);
                     }
                 });
             });
         });
 
-        // =============================================
-        // 9. BACK TO TOP
-        // =============================================
-        const backToTopBtn = document.querySelector('.back-to-top');
-        if (backToTopBtn) {
-            backToTopBtn.addEventListener('click', function () {
+        // ===== BACK TO TOP =====
+        if (backTopBtn) {
+            backTopBtn.addEventListener('click', function () {
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             });
         }
 
-        // =============================================
-        // 10. COOKIE BANNER
-        // =============================================
-        const cookieBanner = document.getElementById('cookie-banner');
-        const cookieAccept = document.getElementById('cookie-accept');
+        // ===== COOKIE BANNER =====
+        var cookieBanner = document.getElementById('cookie-banner');
+        var cookieAccept = document.getElementById('cookie-accept');
+
         if (cookieBanner) {
             if (localStorage.getItem('cookiesAccepted') === 'true') {
                 cookieBanner.classList.add('hidden');
             } else {
-                setTimeout(function () { cookieBanner.classList.remove('hidden'); }, 3500);
+                setTimeout(function () {
+                    cookieBanner.classList.remove('hidden');
+                }, 3500);
             }
         }
         if (cookieAccept) {
@@ -383,43 +369,44 @@
             });
         }
 
-        // =============================================
-        // 11. CONTACT FORM
-        // =============================================
-        const contactForm = document.getElementById('contact-form');
-        const notification = document.getElementById('notification');
+        // ===== CONTACT FORM — Google Sheets PRESERVED =====
+        var contactForm = document.getElementById('contact-form');
+        var notification = document.getElementById('notification');
 
         function showNotification(msg) {
             if (!notification) return;
-            const textEl = document.getElementById('notification-text');
+            var textEl = document.getElementById('notification-text');
             if (textEl) textEl.textContent = msg;
             notification.classList.add('show');
             setTimeout(function () { notification.classList.remove('show'); }, 4000);
         }
 
         if (contactForm) {
-            const GOOGLE_SHEET_URL = 'https://script.google.com/macros/s/AKfycbyF4Of20yctGHGQDkI56qM4kxhTkEkpqkqsOpT3ragJpksSTcqBOoqYVVGDt3Rlt9jU/exec';
+            var GOOGLE_SHEET_URL = 'https://script.google.com/macros/s/AKfycbyF4Of20yctGHGQDkI56qM4kxhTkEkpqkqsOpT3ragJpksSTcqBOoqYVVGDt3Rlt9jU/exec';
 
             contactForm.addEventListener('submit', function (e) {
                 e.preventDefault();
-                const name = document.getElementById('contact-name');
-                const email = document.getElementById('contact-email');
-                const subject = document.getElementById('contact-subject');
-                const message = document.getElementById('contact-message');
+
+                var name = document.getElementById('contact-name');
+                var email = document.getElementById('contact-email');
+                var subject = document.getElementById('contact-subject');
+                var message = document.getElementById('contact-message');
 
                 if (!name || !name.value.trim()) { showNotification('Please enter your name.'); return; }
-                if (!email || !email.value.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value)) { showNotification('Please enter a valid email.'); return; }
-                if (!message || !message.value.trim()) { showNotification('Please enter your message.'); return; }
+                if (!email || !email.value.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value)) {
+                    showNotification('Please enter a valid email.'); return;
+                }
+                if (!message || !message.value.trim()) { showNotification('Please describe your challenges.'); return; }
 
-                const btn = contactForm.querySelector('button[type="submit"]');
-                const original = btn ? btn.innerHTML : '';
+                var btn = contactForm.querySelector('button[type="submit"]');
+                var originalHTML = btn ? btn.innerHTML : '';
                 if (btn) {
                     btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
                     btn.disabled = true;
                     btn.style.opacity = '0.7';
                 }
 
-                // Hidden iframe method — bypasses ALL CORS issues
+                // Hidden iframe method — PRESERVED EXACTLY
                 var iframeName = 'hidden-form-iframe-' + Date.now();
                 var iframe = document.createElement('iframe');
                 iframe.name = iframeName;
@@ -451,230 +438,91 @@
                 document.body.appendChild(hiddenForm);
                 hiddenForm.submit();
 
-                // After submit, show success (iframe handles the actual POST)
                 iframe.addEventListener('load', function () {
                     if (btn) {
-                        btn.innerHTML = '<i class="fas fa-check"></i> Sent!';
+                        btn.innerHTML = '<i class="fas fa-check-circle"></i> Sent!';
                         btn.style.opacity = '1';
                     }
-                    showNotification('Message sent successfully! Dr. Dhir will get back to you soon.');
+                    showNotification('Inquiry sent successfully! Dr. Dhir will respond soon.');
                     setTimeout(function () {
-                        if (btn) { btn.innerHTML = original; btn.disabled = false; }
+                        if (btn) { btn.innerHTML = originalHTML; btn.disabled = false; }
                         contactForm.reset();
                     }, 2500);
-                    // Clean up
                     setTimeout(function () {
                         document.body.removeChild(iframe);
                         document.body.removeChild(hiddenForm);
                     }, 5000);
                 });
 
-                // Fallback timeout in case iframe load doesn't fire
+                // Fallback timeout
                 setTimeout(function () {
                     if (btn && btn.disabled) {
-                        btn.innerHTML = '<i class="fas fa-check"></i> Sent!';
+                        btn.innerHTML = '<i class="fas fa-check-circle"></i> Sent!';
                         btn.style.opacity = '1';
                         btn.disabled = false;
-                        showNotification('Message sent successfully! Dr. Dhir will get back to you soon.');
+                        showNotification('Inquiry sent successfully! Dr. Dhir will respond soon.');
                         contactForm.reset();
-                        setTimeout(function () { btn.innerHTML = original; }, 2000);
+                        setTimeout(function () { btn.innerHTML = originalHTML; }, 2000);
                     }
                 }, 4000);
             });
         }
 
-        // =============================================
-        // 12. NEWSLETTER
-        // =============================================
-        const newsletterForm = document.getElementById('newsletter-form');
-        if (newsletterForm) {
-            newsletterForm.addEventListener('submit', function (e) {
-                e.preventDefault();
-                const input = this.querySelector('input[type="email"]');
-                if (!input || !input.value.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(input.value)) {
-                    showNotification('Please enter a valid email address.');
-                    return;
-                }
-                showNotification('Successfully subscribed! Thank you.');
-                input.value = '';
-            });
-        }
-
-        // =============================================
-        // 13. TYPING EFFECT
-        // =============================================
-        const typingElement = document.getElementById('typing-text');
+        // ===== TYPING EFFECT =====
+        var typingElement = document.getElementById('typing-text');
         if (typingElement) {
-            const phrases = [
+            var phrases = [
                 'GMP Compliance',
                 'Data Integrity',
-                'Regulatory Excellence',
-                'Quality Leadership',
-                'Green Analytical Chemistry',
-                'USFDA Audit Readiness',
-                'QMS Implementation'
+                'Audit Readiness',
+                'Quality Systems',
+                'Regulatory Strategy',
+                'USFDA Compliance',
+                'Green Chemistry',
+                'CAPA & Risk Management'
             ];
-            let phraseIndex = 0, charIndex = 0, isDeleting = false, typeSpeed = 80;
+            var phraseIndex = 0;
+            var charIndex = 0;
+            var isDeleting = false;
+            var typeSpeed = 80;
 
             function typeEffect() {
-                const currentPhrase = phrases[phraseIndex];
+                var currentPhrase = phrases[phraseIndex];
+
                 if (isDeleting) {
                     typingElement.textContent = currentPhrase.substring(0, charIndex - 1);
                     charIndex--;
-                    typeSpeed = 28;
+                    typeSpeed = 30;
                 } else {
                     typingElement.textContent = currentPhrase.substring(0, charIndex + 1);
                     charIndex++;
-                    typeSpeed = 68;
+                    typeSpeed = 70;
                 }
+
                 if (!isDeleting && charIndex === currentPhrase.length) {
-                    typeSpeed = 2500;
+                    typeSpeed = 2800;
                     isDeleting = true;
                 } else if (isDeleting && charIndex === 0) {
                     isDeleting = false;
                     phraseIndex = (phraseIndex + 1) % phrases.length;
-                    typeSpeed = 500;
+                    typeSpeed = 450;
                 }
+
                 setTimeout(typeEffect, typeSpeed);
             }
+
             setTimeout(typeEffect, 2800);
         }
 
-        // =============================================
-        // 14. MOUSE FOLLOWER
-        // =============================================
-        const follower = document.getElementById('mouse-follower');
-        if (follower && window.innerWidth >= 1024) {
-            let mouseX = 0, mouseY = 0, followerX = 0, followerY = 0;
-
-            document.addEventListener('mousemove', function (e) {
-                mouseX = e.clientX;
-                mouseY = e.clientY;
-            });
-
-            function animateFollower() {
-                followerX += (mouseX - followerX) * 0.1;
-                followerY += (mouseY - followerY) * 0.1;
-                follower.style.left = followerX + 'px';
-                follower.style.top = followerY + 'px';
-                requestAnimationFrame(animateFollower);
-            }
-            animateFollower();
-
-            const interactives = document.querySelectorAll('a, button, .expertise-card, .publication-card, .blog-card, .achievement-card, .contact-card, .approval-card, .edu-card, .pillar-card, .training-tag');
-            interactives.forEach(function (el) {
-                el.addEventListener('mouseenter', function () {
-                    follower.style.width = '45px';
-                    follower.style.height = '45px';
-                    follower.style.borderColor = 'rgba(14, 165, 233, 0.4)';
-                    follower.style.borderWidth = '1px';
-                });
-                el.addEventListener('mouseleave', function () {
-                    follower.style.width = '20px';
-                    follower.style.height = '20px';
-                    follower.style.borderColor = 'rgba(14, 165, 233, 0.3)';
-                    follower.style.borderWidth = '1.5px';
-                });
-            });
-        }
-
-        // =============================================
-        // 15. CARD TILT — Premium 3D Effect
-        // =============================================
-        if (window.innerWidth >= 1024) {
-            const tiltCards = document.querySelectorAll('[data-tilt]');
-            tiltCards.forEach(function (card) {
-                card.addEventListener('mousemove', function (e) {
-                    const rect = card.getBoundingClientRect();
-                    const x = e.clientX - rect.left;
-                    const y = e.clientY - rect.top;
-                    const centerX = rect.width / 2;
-                    const centerY = rect.height / 2;
-                    const rotateX = (y - centerY) / centerY * -3.5;
-                    const rotateY = (x - centerX) / centerX * 3.5;
-                    card.style.transform = 'perspective(800px) rotateX(' + rotateX + 'deg) rotateY(' + rotateY + 'deg) translateY(-6px) scale(1.01)';
-                });
-                card.addEventListener('mouseleave', function () {
-                    card.style.transform = '';
-                    card.style.transition = 'transform 0.5s cubic-bezier(0.19, 1, 0.22, 1)';
-                    setTimeout(() => card.style.transition = '', 500);
-                });
-            });
-        }
-
-        // =============================================
-        // 16. PARALLAX
-        // =============================================
-        const heroDecos = document.querySelectorAll('.hero-deco');
-        if (heroDecos.length > 0 && window.innerWidth >= 768) {
-            window.addEventListener('scroll', throttle(function () {
-                const scrollY = window.scrollY;
-                if (scrollY > window.innerHeight) return;
-                heroDecos.forEach(function (deco, i) {
-                    deco.style.transform = 'translateY(' + (scrollY * (0.1 + i * 0.04)) + 'px)';
-                });
-            }, 16), { passive: true });
-        }
-
-        // =============================================
-        // 17. MAGNETIC BUTTONS
-        // =============================================
-        if (window.innerWidth >= 1024) {
-            const magneticBtns = document.querySelectorAll('.btn-primary, .btn-secondary');
-            magneticBtns.forEach(function (btn) {
-                btn.addEventListener('mousemove', function (e) {
-                    const rect = btn.getBoundingClientRect();
-                    const x = e.clientX - rect.left - rect.width / 2;
-                    const y = e.clientY - rect.top - rect.height / 2;
-                    btn.style.transform = 'translate(' + (x * 0.15) + 'px, ' + (y * 0.15 - 3) + 'px) scale(1.03)';
-                });
-                btn.addEventListener('mouseleave', function () {
-                    btn.style.transform = '';
-                    btn.style.transition = 'all 0.4s cubic-bezier(0.19, 1, 0.22, 1)';
-                    setTimeout(() => btn.style.transition = '', 400);
-                });
-            });
-        }
-
-        // =============================================
-        // 18. COUNTER BG ANIMATION
-        // =============================================
-        if (counterGrid) {
-            const cObs2 = new IntersectionObserver(function (entries) {
-                entries.forEach(function (entry) {
-                    if (entry.isIntersecting) {
-                        entry.target.style.backgroundSize = '200% 200%';
-                        entry.target.style.animation = 'gradientShift 5s ease infinite';
-                    }
-                });
-            }, { threshold: 0.25 });
-            cObs2.observe(counterGrid);
-        }
-
-        // =============================================
-        // 19. KEYBOARD A11Y
-        // =============================================
-        document.addEventListener('keydown', function (e) {
-            if (e.key === 'Tab') document.body.classList.add('keyboard-nav');
-        });
-        document.addEventListener('mousedown', function () {
-            document.body.classList.remove('keyboard-nav');
-        });
-
-        // =============================================
-        // 20. WAVE DIVIDER PARALLAX
-        // =============================================
-        const waveDividers = document.querySelectorAll('.wave-divider');
-        if (waveDividers.length > 0 && window.innerWidth >= 768) {
-            window.addEventListener('scroll', throttle(function () {
-                waveDividers.forEach(function (wave) {
-                    const rect = wave.getBoundingClientRect();
-                    if (rect.top < window.innerHeight && rect.bottom > 0) {
-                        const offset = (rect.top / window.innerHeight) * 10;
-                        wave.querySelector('svg').style.transform = 'translateY(' + offset + 'px)';
-                    }
-                });
-            }, 32), { passive: true });
+        // ===== PARALLAX EFFECT ON HERO STATS =====
+        var heroStatsBar = document.querySelector('.hero-stats-bar');
+        if (heroStatsBar && window.innerWidth > 768) {
+            window.addEventListener('scroll', function () {
+                var scrollY = window.scrollY;
+                if (scrollY < window.innerHeight) {
+                    heroStatsBar.style.transform = 'translateY(' + (scrollY * 0.05) + 'px)';
+                }
+            }, { passive: true });
         }
 
     }); // End DOMContentLoaded
