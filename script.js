@@ -342,6 +342,35 @@
             });
         });
 
+        // ===== GALLERY FILTERS =====
+        var galleryFilterBtns = document.querySelectorAll('.gallery-filter-btn');
+        var galleryItems = document.querySelectorAll('.gallery-item');
+
+        galleryFilterBtns.forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                galleryFilterBtns.forEach(function (b) { b.classList.remove('active'); });
+                this.classList.add('active');
+                var filter = this.getAttribute('data-gallery-filter');
+
+                galleryItems.forEach(function (item, index) {
+                    if (filter === 'all' || item.getAttribute('data-gallery-cat') === filter) {
+                        item.classList.remove('gallery-hidden');
+                        item.style.opacity = '0';
+                        item.style.transform = 'scale(0.95)';
+                        setTimeout(function () {
+                            item.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
+                            item.style.opacity = '1';
+                            item.style.transform = 'scale(1)';
+                        }, 30 + index * 50);
+                    } else {
+                        item.style.opacity = '0';
+                        item.style.transform = 'scale(0.95)';
+                        setTimeout(function () { item.classList.add('gallery-hidden'); }, 300);
+                    }
+                });
+            });
+        });
+
         // ===== BACK TO TOP =====
         if (backTopBtn) {
             backTopBtn.addEventListener('click', function () {
