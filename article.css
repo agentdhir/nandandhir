@@ -42,8 +42,10 @@ body {
 .article-nav .brand {
     font-weight: 800; font-size: 1rem; color: var(--navy);
     text-decoration: none; letter-spacing: -0.3px;
+    display: inline-flex; align-items: center; gap: 6px;
 }
 .article-nav .brand span { color: var(--teal); }
+.article-nav .brand svg { width: 22px; height: 22px; }
 
 /* ===== ARTICLE HERO ===== */
 .article-hero {
